@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
+using System.IO;
 using System.Net.Sockets;
 using System.Net;
 using System.Security.Cryptography;
@@ -16,15 +17,20 @@ public class Program : MonoBehaviour {
 	public UIInput speakText;
 	int port = 2223;
 
-	static Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-	static private string guid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+	TcpClient socket = new TcpClient();
 
 	void Start () {
 		ipaddress.value = GetIpAddr ();
 	}
 
 	public void Connect () {
-		Debug.Log ("Connecting");
+		if (socket != null) 
+		{
+			if (socket.Connected)
+				socket.Close ();
+			else
+				socket.Connect (ipaddress.value, port);
+		}
 //		string jsonString = @"{""dialog"":""hello"", ""tts"":""Im nao"", ""behavior"":""Behavior1""}";
 //		Hashtable hashTable = JsonParser._Instance.StringToHashTable (jsonString);
 //		Debug.Log (JsonParser._Instance.HashtableToJsonString(hashTable));
@@ -78,21 +84,10 @@ public class Program : MonoBehaviour {
 	}
 
 	void Send (string jsonString) {
-		Hashtable hashTable = JsonParser._Instance.StringToHashTable (jsonString);
-		Debug.Log (JsonParser._Instance.HashtableToJsonString(hashTable));
-		
-		string data = hashTable == null ? "{}" : JsonParser._Instance.HashtableToJsonString (hashTable);
-		
-		Hashtable header = new Hashtable();
-		header.Add ("Content-Type", "application/json; charset=utf-8");
-		header.Add ("Content-Length", data.Length );
-
-		SetIpAddr(ipaddress.value);
-		WWW www = new WWW (ipaddress.value+":"+port.ToString(), Encoding.UTF8.GetBytes(data), header);
-		if (www.error != null)
-			Debug.Log ("Error");
-		else
-			Debug.Log ("Success");
+		NetworkStream stream = socket.GetStream();
+		byte[] outStream = Encoding.UTF8.GetBytes(jsonString + "\r\n");
+		stream.Write(outStream, 0, outStream.Length);
+		stream.Flush();
 	}
 
 	static public string GetIpAddr()
