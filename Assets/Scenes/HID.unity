@@ -81,6 +81,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1014327003}
     m_Modifications:
+    - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
+      propertyPath: onSubmit.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: m_LocalPosition.x
       value: -118
@@ -1170,6 +1174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipaddress: {fileID: 1003654216}
   speakText: {fileID: 851831674}
+  connectButton: {fileID: 592387372}
 --- !u!65 &592387371
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1824,11 +1829,7 @@ MonoBehaviour:
   activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   caretColor: {r: 1, g: 1, b: 1, a: .800000012}
   selectionColor: {r: 1, g: .874509811, b: .552941203, a: .5}
-  onSubmit:
-  - mTarget: {fileID: 592387370}
-    mMethodName: Speak
-    mParameters: []
-    oneShot: 0
+  onSubmit: []
   onChange: []
   mValue: 
 --- !u!114 &851831675
@@ -1937,11 +1938,7 @@ MonoBehaviour:
   activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   caretColor: {r: 1, g: 1, b: 1, a: .800000012}
   selectionColor: {r: 1, g: .874509811, b: .552941203, a: .5}
-  onSubmit:
-  - mTarget: {fileID: 592387370}
-    mMethodName: Connect
-    mParameters: []
-    oneShot: 0
+  onSubmit: []
   onChange: []
   mValue: 
 --- !u!114 &1003654217
@@ -3303,6 +3300,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1014327003}
     m_Modifications:
+    - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
+      propertyPath: onSubmit.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: m_LocalPosition.x
       value: -118

@@ -2,8 +2,8 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -15,44 +15,44 @@ public class Program : MonoBehaviour {
 
 	public UIInput ipaddress;
 	public UIInput speakText;
+	public UIButton connectButton;
 	int port = 2223;
 
-	TcpClient socket = new TcpClient();
+	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 	void Start () {
 		ipaddress.value = GetIpAddr ();
+//		socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 	}
 
 	public void Connect () {
-		if (socket != null) 
+		try 
 		{
-			if (socket.Connected)
-				socket.Close ();
+			if (!socket.Connected)
+			{
+				SetIpAddr(ipaddress.value);
+				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
+				socket.Connect(endpoint);
+				UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
+				label.text = "Disconnect";
+			}
 			else
-				socket.Connect (ipaddress.value, port);
+			{
+				socket.Shutdown(SocketShutdown.Both);
+				socket.Disconnect (true);
+				Application.LoadLevel(0);
+			}
 		}
-//		string jsonString = @"{""dialog"":""hello"", ""tts"":""Im nao"", ""behavior"":""Behavior1""}";
-//		Hashtable hashTable = JsonParser._Instance.StringToHashTable (jsonString);
-//		Debug.Log (JsonParser._Instance.HashtableToJsonString(hashTable));
-//
-//		string data = hashTable == null ? "{}" : JsonParser._Instance.HashtableToJsonString (hashTable);
-//
-//		Hashtable header = new Hashtable();
-//		header.Add ("Content-Type", "application/json; charset=utf-8");
-//		header.Add ("Content-Length", data.Length );
-//
-//		WWW www = new WWW (ipaddress.value+":"+port.ToString(), Encoding.UTF8.GetBytes(data), header);
-//		if (www.error != null)
-//			Debug.Log ("Error");
-//		else
-//			Debug.Log ("Success");
+		catch (Exception ex) 
+		{
+			Debug.Log (ex.ToString ());
+		}
 	}
 
 	public void Speak () {
 		string jsonString = @"{""dialog"":""";
 		jsonString += speakText.value;
 		jsonString += @"""}";
-		Debug.Log (jsonString);
 		Send (jsonString);
 	}
 
@@ -84,10 +84,8 @@ public class Program : MonoBehaviour {
 	}
 
 	void Send (string jsonString) {
-		NetworkStream stream = socket.GetStream();
-		byte[] outStream = Encoding.UTF8.GetBytes(jsonString + "\r\n");
-		stream.Write(outStream, 0, outStream.Length);
-		stream.Flush();
+		Debug.Log (jsonString);
+		socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
 	}
 
 	static public string GetIpAddr()
