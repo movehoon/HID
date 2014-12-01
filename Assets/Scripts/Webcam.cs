@@ -6,6 +6,7 @@ public class Webcam : MonoBehaviour {
 
 	public const int WEBCAM_WIDTH = 1280;
 	public const int WEBCAM_HEIGHT = 720;
+	public const int ratio = 4;
 
 	public GameObject receiverObject;
 
@@ -17,7 +18,7 @@ public class Webcam : MonoBehaviour {
 		webcam = new WebCamTexture (WEBCAM_WIDTH, WEBCAM_HEIGHT, 10);
 		webcam.Play ();
 		if (webcam != null)
-			texture = new Texture2D (WEBCAM_WIDTH, WEBCAM_HEIGHT);
+			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
 	}
 	
 	// Update is called once per frame
@@ -28,7 +29,15 @@ public class Webcam : MonoBehaviour {
 		if (webcam.width == WEBCAM_WIDTH && webcam.height == WEBCAM_HEIGHT) 
 		{
 			renderer.material.mainTexture = webcam;
-			texture.SetPixels (webcam.GetPixels ());
+			for (int y = 0 ; y < webcam.height ; y+=ratio)
+			{
+				for (int x = 0 ; x < webcam.width ; x+=ratio)
+				{
+					Color color = webcam.GetPixel(x, y);
+					texture.SetPixel(x/ratio, y/ratio, color); 
+				}
+			}
+//			texture.SetPixels (webcam.GetPixels ());
 			texture.Apply ();
 			byte[] imgBytes = texture.EncodeToJPG ();
 //			File.WriteAllBytes("src.png", webcamToPng);

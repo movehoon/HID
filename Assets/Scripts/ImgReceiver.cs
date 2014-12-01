@@ -8,7 +8,7 @@ public class ImgReceiver : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		texture = new Texture2D (Webcam.WEBCAM_WIDTH, Webcam.WEBCAM_HEIGHT);
+		texture = new Texture2D (Webcam.WEBCAM_WIDTH/Webcam.ratio, Webcam.WEBCAM_HEIGHT/Webcam.ratio);
 	}
 	
 	public void DrawImg (byte[] img) {

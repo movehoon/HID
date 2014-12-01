@@ -12,8 +12,8 @@ public class ImgServer : MonoBehaviour {
 	WebCamTexture webcam = null;
 	Texture2D texture;
 
-	ServerConfig config = new ServerConfig ();
-	Server server = new Server (config);
+//	ServerConfig config = new ServerConfig ();
+//	Server server = new Server (config);
 	
 	// Use this for initialization
 	void Start () {
