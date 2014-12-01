@@ -26,9 +26,9 @@ public class Webcam : MonoBehaviour {
 		if (!webcam.isPlaying)
 			return;
 
+		renderer.material.mainTexture = webcam;
 		if (webcam.width == WEBCAM_WIDTH && webcam.height == WEBCAM_HEIGHT) 
 		{
-			renderer.material.mainTexture = webcam;
 			for (int y = 0 ; y < webcam.height ; y+=ratio)
 			{
 				for (int x = 0 ; x < webcam.width ; x+=ratio)
