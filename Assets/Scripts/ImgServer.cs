@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
-using Verso.Core;
-using Verso.Server;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 
 public class ImgServer : MonoBehaviour {
 
@@ -15,8 +17,9 @@ public class ImgServer : MonoBehaviour {
 	static Texture2D texture;
 	static byte[] imgBytes;
 
-	static Server server = null;
-	static Connection myConnection;
+	TcpListener server = null;
+//	Socket server = null;
+	Thread thread;
 
 	// Use this for initialization
 	void Start () {
@@ -25,14 +28,56 @@ public class ImgServer : MonoBehaviour {
 		if (webcam != null)
 			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
 
-		ServerConfig config = new ServerConfig ();
-		config.port = 3003;
-		server = new Server (config);
-		server.OnClientConnected += server_OnClientConnected;
-		server.OnConnectionClosed += connection_OnConnectionClosed;
-		server.Start ();
+//		StartCoroutine ("TcpListener_Co");
+		ThreadStart ts = new ThreadStart(TcpListener_Co);
+		thread = new Thread(ts);
+		thread.Start();
 	}
-	
+
+//	IEnumerator ServerListen () {
+//		IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3003);
+//		server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//		try
+//		{
+//			server.Bind (ipep);
+//			server.Listen (2);
+//		}
+//		catch (SocketException e)
+//		{
+//			Debug.Log(e.ToString());
+//		}
+//		while (true) 
+//		{	
+//			Socket client;
+//			try {
+//				client = server.Accept ();
+//				if (client.Connected)
+//					SendBuffer(client, imgBytes);
+//			}
+//			catch (Exception ex) {
+//				Debug.Log (ex.ToString ());
+//			}
+//			yield return new WaitForSeconds (0.01f);
+//		}
+//	}
+
+	void TcpListener_Co () {
+//	IEnumerator TcpListener_Co () {
+		server = new TcpListener (IPAddress.Parse("127.0.0.1"), 3003);
+		server.Start ();
+//		while (true) 
+		{
+			Debug.Log ("[server] Waiting for a connection... ");
+//			yield return new WaitForSeconds (0.01f);
+			TcpClient client = server.AcceptTcpClient ();
+			Debug.Log ("[Server] Connected");
+//			NetworkStream stream = client.GetStream ();
+			client.Close ();
+			Debug.Log ("[Server] Disconnected");
+		}
+//		yield return null;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (!webcam.isPlaying)
@@ -57,21 +102,27 @@ public class ImgServer : MonoBehaviour {
 			
 //			ImgReceiver imgReceiver = receiverObject.GetComponentInChildren <ImgReceiver> () as ImgReceiver;
 //			imgReceiver.DrawImg (imgBytes);
+
+		}
+	}
+
+	private static int SendBuffer (Socket s, byte[] buff) {
+		int total = 0;
+		int size = buff.Length;
+		int dataleft = size;
+		int sent;
+
+		byte[] datasize = new byte[0];
+		datasize = BitConverter.GetBytes (size);
+		sent = s.Send (datasize);
+
+		while (total < size) 
+		{
+			sent = s.Send (buff, total, dataleft, SocketFlags.None);
+			total += sent;
+			dataleft -= sent;
 		}
 
+		return total;
 	}
-
-	static void server_OnClientConnected(Connection connection)
-	{
-		Debug.Log("Client " + connection.remoteEndPoint + " connected.");
-		myConnection = connection;
-		Debug.Log ("Send img buffer size " + imgBytes.GetLength (0).ToString ());
-		connection.SendRawData (imgBytes, 0, imgBytes.GetLength (0));
-	}
-
-	static void connection_OnConnectionClosed(Connection connection)
-	{
-		Debug.Log("Client " + connection.remoteEndPoint + " disconnected.");
-	}
-
 }

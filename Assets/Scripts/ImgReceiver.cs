@@ -1,22 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-using Verso.Core;
-using Verso.Client;
+using System.Net;
+using System.Net.Sockets;
 
 public class ImgReceiver : MonoBehaviour {
 
 	Texture2D texture;
 
-	private Client client;
-	private Connection connection;
-
-
+	TcpClient client = new TcpClient ();
+//	Socket client = null;
 
 	// Use this for initialization
 	void Start () {
 		texture = new Texture2D (Webcam.WEBCAM_WIDTH/Webcam.ratio, Webcam.WEBCAM_HEIGHT/Webcam.ratio);
-
 	}
 	
 	public void DrawImg (byte[] img) {
@@ -27,47 +24,34 @@ public class ImgReceiver : MonoBehaviour {
 	}
 
 	public void ConnectToServer () {
-		Debug.Log ("ConnectToServer");
+		Debug.Log ("[client]ConnectToServer");
+//		IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3003);
+//		client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//		try
+//		{
+//			client.Connect(ipep);
+//		}
+//		catch (SocketException e)
+//		{
+//			Debug.Log(e.ToString());
+//		}
 
-		ClientConfig cc = new ClientConfig();
-		cc.realTime = true;
-		client = new Client(cc);
-		client.OnConnected += client_OnConnected;
-		client.OnConnectionClosed += client_OnConnectionClosed;
-		client.OnRawDataReceived += client_OnRawDataReceived;
-		client.OnError += client_OnError;
-		client.Connect ("127.0.0.1", 3003);
+		client.Connect (IPAddress.Parse ("127.0.0.1"), 3003);
+		NetworkStream nNetStream = client.GetStream ();
+		while (client.Connected)
+		{
+			Debug.Log ("[client]Connected...");
+			byte[] bytes = new byte[client.ReceiveBufferSize];
+			if (nNetStream.CanRead)
+			{
+				nNetStream.Read(bytes, 0, bytes.Length);  
+			}
+			else
+			{
+				client.Close();
+				nNetStream.Close();
+			}
+		}
+		client.Close();
 	}
-
-	
-	void client_OnError(string error)
-	{
-		Debug.Log("Connection error: " + error);
-	}
-
-	void client_OnRawDataReceived(byte[] data)
-	{
-		Debug.Log("client_OnRawDataReceived: " + data.GetLength (0).ToString ());
-	}
-	
-//	void client_OnMessageReceived(IncomingMessage im)
-//	{
-//		Debug.Log("client_OnMessageReceived: " + im.length.ToString ());
-//	}
-	
-	void client_OnConnectionClosed()
-	{
-		Debug.Log("Disconnected from server.");
-		connection = null;
-	}
-	
-	void client_OnConnected()
-	{
-		connection = client.connection;
-		Debug.Log("Connected to server.");
-		OutgoingMessage om = new OutgoingMessage();
-//		om.WriteByte(C_ENTER_GAME);
-		connection.SendMessage(om);
-	}
-
 }
