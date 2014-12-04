@@ -20,6 +20,15 @@ public class ImgServer : MonoBehaviour {
 	TcpListener server = null;
 //	Socket server = null;
 	Thread thread;
+	bool mRunning;
+
+	void Awake () {
+//		StartCoroutine ("TcpListener_Co");
+		mRunning = true;
+		ThreadStart ts = new ThreadStart(TcpListener_Co);
+		thread = new Thread(ts);
+		thread.Start();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -27,11 +36,6 @@ public class ImgServer : MonoBehaviour {
 		webcam.Play ();
 		if (webcam != null)
 			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
-
-//		StartCoroutine ("TcpListener_Co");
-		ThreadStart ts = new ThreadStart(TcpListener_Co);
-		thread = new Thread(ts);
-		thread.Start();
 	}
 
 //	IEnumerator ServerListen () {
@@ -65,15 +69,30 @@ public class ImgServer : MonoBehaviour {
 //	IEnumerator TcpListener_Co () {
 		server = new TcpListener (IPAddress.Parse("127.0.0.1"), 3003);
 		server.Start ();
-//		while (true) 
+		while (mRunning) 
 		{
 			Debug.Log ("[server] Waiting for a connection... ");
-//			yield return new WaitForSeconds (0.01f);
-			TcpClient client = server.AcceptTcpClient ();
-			Debug.Log ("[Server] Connected");
-//			NetworkStream stream = client.GetStream ();
-			client.Close ();
-			Debug.Log ("[Server] Disconnected");
+			if (!server.Pending ())
+			{
+				Thread.Sleep (100);
+			}
+			else
+			{
+				TcpClient client = server.AcceptTcpClient ();
+				Debug.Log ("[Server] Connected");
+				NetworkStream stream = client.GetStream ();
+				byte inByte;
+				while (client.Connected) {
+					inByte = (byte)stream.ReadByte ();
+					Debug.Log ("[server] get: " + inByte.ToString ());
+					stream.WriteByte(++inByte);
+					Thread.Sleep (10);
+				}
+//				client.Close ();
+				Debug.Log ("[Server] Disconnected");
+				break;
+			}
+			Thread.Sleep (10);
 		}
 //		yield return null;
 	}
@@ -124,5 +143,14 @@ public class ImgServer : MonoBehaviour {
 		}
 
 		return total;
+	}
+
+	public void stopListening() {
+		mRunning = false;
+	}
+
+	void OnApplicationQuit () {
+		stopListening();
+		server.Stop ();
 	}
 }
