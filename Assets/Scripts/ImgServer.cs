@@ -38,33 +38,6 @@ public class ImgServer : MonoBehaviour {
 			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
 	}
 
-//	IEnumerator ServerListen () {
-//		IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3003);
-//		server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-//		try
-//		{
-//			server.Bind (ipep);
-//			server.Listen (2);
-//		}
-//		catch (SocketException e)
-//		{
-//			Debug.Log(e.ToString());
-//		}
-//		while (true) 
-//		{	
-//			Socket client;
-//			try {
-//				client = server.Accept ();
-//				if (client.Connected)
-//					SendBuffer(client, imgBytes);
-//			}
-//			catch (Exception ex) {
-//				Debug.Log (ex.ToString ());
-//			}
-//			yield return new WaitForSeconds (0.01f);
-//		}
-//	}
-
 	void TcpListener_Co () {
 //	IEnumerator TcpListener_Co () {
 		server = new TcpListener (IPAddress.Parse("127.0.0.1"), 3003);
@@ -84,13 +57,16 @@ public class ImgServer : MonoBehaviour {
 				byte inByte;
 				while (client.Connected) {
 					inByte = (byte)stream.ReadByte ();
-					Debug.Log ("[server] get: " + inByte.ToString ());
-					stream.WriteByte(++inByte);
-					Thread.Sleep (10);
+					if (inByte == 100) {
+						Debug.Log ("[server] get: " + inByte.ToString ());
+						byte[] intBytes = BitConverter.GetBytes(imgBytes.Length);
+						stream.Write(intBytes, 0, intBytes.Length);
+						stream.Write (imgBytes, 0, imgBytes.Length);
+						Debug.Log ("[server] send count: " + imgBytes.Length.ToString ());
+						Thread.Sleep (10);
+						break;
+					}
 				}
-//				client.Close ();
-				Debug.Log ("[Server] Disconnected");
-				break;
 			}
 			Thread.Sleep (10);
 		}
