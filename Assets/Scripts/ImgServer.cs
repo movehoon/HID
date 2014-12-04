@@ -64,7 +64,7 @@ public class ImgServer : MonoBehaviour {
 						stream.Write (imgBytes, 0, imgBytes.Length);
 						Debug.Log ("[server] send count: " + imgBytes.Length.ToString ());
 						Thread.Sleep (10);
-						break;
+//						break;
 					}
 				}
 			}
@@ -123,10 +123,10 @@ public class ImgServer : MonoBehaviour {
 
 	public void stopListening() {
 		mRunning = false;
+		server.Stop ();
 	}
 
 	void OnApplicationQuit () {
 		stopListening();
-		server.Stop ();
 	}
 }
