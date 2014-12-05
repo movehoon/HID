@@ -61,7 +61,7 @@ public class ImgServer : MonoBehaviour {
 				while (client.Connected) {
 					try {
 						int nRead = stream.Read (inByte, 0, 1024);
-//						Debug.Log ("[server] get: " + inByte[0].ToString () + ", " + nRead.ToString () + " bytes");
+						Debug.Log ("[server] get: " + inByte[0].ToString () + ", " + nRead.ToString () + " bytes");
 					} catch (Exception ex) {
 						Debug.Log (ex.ToString ());
 						continue;
