@@ -9,7 +9,7 @@ public class ImgServer : MonoBehaviour {
 
 	public const int WEBCAM_WIDTH = 1280;
 	public const int WEBCAM_HEIGHT = 720;
-	public const int ratio = 4;
+	public const int ratio = 8;
 
 	public const string ipAddr = "127.0.0.1";
 
@@ -34,8 +34,7 @@ public class ImgServer : MonoBehaviour {
 		catch (Exception ex) {
 			Debug.Log (ex.ToString ());
 		}
-		ThreadStart ts = new ThreadStart(TcpListener_Co);
-		thread = new Thread(ts);
+		thread = new Thread(new ThreadStart(TcpListener_Co));
 		thread.Start();
 	}
 
@@ -61,19 +60,30 @@ public class ImgServer : MonoBehaviour {
 				TcpClient client = server.AcceptTcpClient ();
 				Debug.Log ("[Server] Connected");
 				NetworkStream stream = client.GetStream ();
-				byte inByte;
+				stream.ReadTimeout = 10;
+				stream.Flush ();
 				while (client.Connected) {
-					inByte = (byte)stream.ReadByte ();
+					byte inByte;
+					try {
+						inByte = (byte)stream.ReadByte ();
+					} catch (Exception ex) {
+						Debug.Log (ex.ToString ());
+						continue;
+					}
+					Debug.Log ("[server] get: " + inByte.ToString ());
 					if (inByte == 100) {
-						Debug.Log ("[server] get: " + inByte.ToString ());
-						byte[] intBytes = BitConverter.GetBytes(imgBytes.Length);
-						stream.Write(intBytes, 0, intBytes.Length);
-						stream.Write (imgBytes, 0, imgBytes.Length);
+						lock (imgBytes)
+						{
+							byte[] intBytes = BitConverter.GetBytes(imgBytes.Length);
+							stream.Write(intBytes, 0, intBytes.Length);
+							stream.Write (imgBytes, 0, imgBytes.Length);
+							stream.Flush ();
+						}
 						Debug.Log ("[server] send count: " + imgBytes.Length.ToString ());
 						Thread.Sleep (10);
-//						break;
 					}
 				}
+				Debug.Log ("[server] client disconnected");
 			}
 			Thread.Sleep (10);
 		}
