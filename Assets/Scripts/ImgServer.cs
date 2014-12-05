@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -104,6 +105,8 @@ public class ImgServer : MonoBehaviour {
 			}
 			texture.Apply ();
 			imgBytes = texture.EncodeToJPG ();
+//			imgBytes = texture.EncodeToPNG ();
+//			File.WriteAllBytes ("src.jpg", imgBytes);
 		}
 	}
 
