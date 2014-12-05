@@ -13,18 +13,19 @@ public class ImgReceiver : MonoBehaviour {
 		READY,
 		GET_LENGTH,
 		GET_IMG,
+		Fail,
 	};
 
 	Texture2D texture;
 	public Text connectButtonText;
 
-	TcpClient client = new TcpClient ();
+	TcpClient client;
 //	Socket client = null;
 	byte[] imgBytes;
 	bool imgReceived = false;
 	bool mRun = false;
 
-	Thread thread;
+//	Thread thread;
 
 	// Use this for initialization
 	void Start () {
@@ -47,37 +48,40 @@ public class ImgReceiver : MonoBehaviour {
 	}
 
 	public void ConnectToServer () {
-		if (!client.Connected)
+		if (client == null || !client.Connected)
 		{
 			Debug.Log ("[client]ConnectToServer");
 			mRun = true;
-			ThreadStart ts = new ThreadStart (ConnectToServer_Thread);
-			thread = new Thread (ts);
+			Thread thread = new Thread (new ThreadStart (ConnectToServer_Thread));
 			thread.Start ();
 			connectButtonText.text = "Disconnect";
 		}
 		else
 		{
-			Disconnect ();
-			connectButtonText.text = "Connect";
-		}
+			if (Disconnect () == true)
+			    connectButtonText.text = "Connect";
+	    }
 	}
 
-	public void Disconnect () {
+	public bool Disconnect () {
 		mRun = false;
-//		client.Client.Close ();
+		Thread.Sleep(10);
+//		thread.Abort ();
 //		client.Close ();
+		if (!client.Connected)
+			return true;
+		return false;
 	}
 
 	void ConnectToServer_Thread () {
 		STATE_RECV state = STATE_RECV.READY;
-//		byte inByte;
 		int imgLength = 0;
 		int nRead;
+		DateTime startTime;
 
+		client = new TcpClient ();
 		client.Connect (IPAddress.Parse ("192.168.0.114"), 3003);
 		NetworkStream nNetStream = client.GetStream ();
-		client.ReceiveBufferSize = 8192 * 2;
 		nNetStream.ReadTimeout = 10;
 		Debug.Log ("[client]Connected");
 		while (mRun && client.Connected)
@@ -108,18 +112,17 @@ public class ImgReceiver : MonoBehaviour {
 					catch (Exception ex)
 					{
 						Debug.Log (ex.ToString ());
-						Thread.Sleep (1);
 						continue;
 					}
 					imgLength = BitConverter.ToInt32(bytes, 0);
-					Debug.Log ("[client] get length " + imgLength.ToString () + " with byte " + nRead.ToString ());
+					Debug.Log ("[client] img length " + imgLength.ToString ());
 					if (imgLength < 0 || imgLength > 1000000)
 					{
-						Thread.Sleep (100);
-						state = STATE_RECV.READY;
+						state = STATE_RECV.Fail;
 					}
 					else 
 					{
+						startTime = DateTime.Now;
 						state = STATE_RECV.GET_IMG;
 					}
 					break;
@@ -127,9 +130,11 @@ public class ImgReceiver : MonoBehaviour {
 				case STATE_RECV.GET_IMG:
 				{
 					Debug.Log ("[client]GET_IMG");
-					if (client.Available < imgLength)
+					if (client.Available < imgLength) {
+						if ((DateTime.Now - startTime).Milliseconds > 10)
+							state = STATE_RECV.Fail;
 						continue;
-					int recvCount = 0;
+					}
 					imgBytes = new byte[imgLength];
 					try 
 					{
@@ -145,6 +150,16 @@ public class ImgReceiver : MonoBehaviour {
 					else
 						Thread.Sleep (100);
 					Debug.Log ("[client] get image " + imgLength.ToString ());
+					state = STATE_RECV.READY;
+					break;
+				}
+				case STATE_RECV.Fail:
+				{
+					Debug.Log ("[client] Fail");
+					Thread.Sleep (100);
+					int nTrash = client.Available;
+					byte[] trash = new byte[nTrash];
+					nNetStream.Read (trash, 0, nTrash);
 					state = STATE_RECV.READY;
 					break;
 				}
