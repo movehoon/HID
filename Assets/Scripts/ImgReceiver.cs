@@ -20,12 +20,9 @@ public class ImgReceiver : MonoBehaviour {
 	public Text connectButtonText;
 
 	TcpClient client;
-//	Socket client = null;
 	byte[] imgBytes;
 	bool imgReceived = false;
 	bool mRun = false;
-
-//	Thread thread;
 
 	// Use this for initialization
 	void Start () {
@@ -66,8 +63,6 @@ public class ImgReceiver : MonoBehaviour {
 	public bool Disconnect () {
 		mRun = false;
 		Thread.Sleep(10);
-//		thread.Abort ();
-//		client.Close ();
 		if (!client.Connected)
 			return true;
 		return false;
@@ -164,8 +159,6 @@ public class ImgReceiver : MonoBehaviour {
 					break;
 				}
 				}
-//				if (imgReceived)
-//					break;
 			}
 			else
 			{
