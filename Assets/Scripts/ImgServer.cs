@@ -11,6 +11,8 @@ public class ImgServer : MonoBehaviour {
 	public const int WEBCAM_HEIGHT = 720;
 	public const int ratio = 4;
 
+	public const string ipAddr = "127.0.0.1";
+
 	public GameObject receiverObject;
 	
 	WebCamTexture webcam = null;
@@ -25,6 +27,13 @@ public class ImgServer : MonoBehaviour {
 	void Awake () {
 //		StartCoroutine ("TcpListener_Co");
 		mRunning = true;
+		try {
+			server = new TcpListener (IPAddress.Parse(ipAddr), 3003);
+			server.Start ();
+		}
+		catch (Exception ex) {
+			Debug.Log (ex.ToString ());
+		}
 		ThreadStart ts = new ThreadStart(TcpListener_Co);
 		thread = new Thread(ts);
 		thread.Start();
@@ -40,8 +49,6 @@ public class ImgServer : MonoBehaviour {
 
 	void TcpListener_Co () {
 //	IEnumerator TcpListener_Co () {
-		server = new TcpListener (IPAddress.Parse("127.0.0.1"), 3003);
-		server.Start ();
 		while (mRunning) 
 		{
 			Debug.Log ("[server] Waiting for a connection... ");
