@@ -28,7 +28,7 @@ public class ImgServer : MonoBehaviour {
 //		StartCoroutine ("TcpListener_Co");
 		mRunning = true;
 		try {
-			server = new TcpListener (IPAddress.Parse(ipAddr), 3003);
+			server = new TcpListener (IPAddress.Any, 3003);
 			server.Start ();
 		}
 		catch (Exception ex) {
