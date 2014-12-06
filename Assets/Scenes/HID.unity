@@ -919,7 +919,6 @@ GameObject:
   - 114: {fileID: 510523074}
   - 114: {fileID: 510523071}
   - 65: {fileID: 510523073}
-  - 114: {fileID: 510523070}
   m_Layer: 8
   m_Name: CamConnect
   m_TagString: Untagged
@@ -927,20 +926,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &510523070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 510523069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eadaecf3be5a346bbb61927c04f62983, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ipaddress: {fileID: 996829037}
-  speakText: {fileID: 851831674}
-  connectButton: {fileID: 510523071}
 --- !u!114 &510523071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3179,7 +3164,6 @@ GameObject:
   - 92: {fileID: 1594162748}
   - 124: {fileID: 1594162747}
   - 81: {fileID: 1594162746}
-  - 114: {fileID: 1594162751}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3252,18 +3236,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &1594162751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1594162745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb0c43ce51f3440e7b4891610d22c72e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
 --- !u!1 &1645327040
 GameObject:
   m_ObjectHideFlags: 0
@@ -3990,7 +3962,7 @@ Prefab:
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: onSubmit.Array.data[0].mTarget
       value: 
-      objectReference: {fileID: 510523070}
+      objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: onSubmit.Array.data[0].mMethodName
       value: Connect
@@ -4124,7 +4096,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camIpAddr: {fileID: 996829037}
   connectButton: {fileID: 510523071}
-  connectButtonText: {fileID: 0}
 --- !u!1 &2101680487
 GameObject:
   m_ObjectHideFlags: 0
