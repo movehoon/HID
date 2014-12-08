@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Xml.Serialization;
 using LitJson;
 
 public class Program : MonoBehaviour {
@@ -99,5 +100,20 @@ public class Program : MonoBehaviour {
 	static public void SetIpAddr(string ipAddr)
 	{
 		PlayerPrefs.SetString(Key_IpAddr, ipAddr);
+	}
+
+	public void MakeXml()
+	{
+//		string json = @"
+//			{""state"":
+//				{""id"":""s0"",
+//				 ""name"":""Ready""},
+//			{""action"":
+//				{""tts"":""hello"",
+//				 ""behavior"":""behav0""},
+//			[{""s1"":"".""}]
+//			}";
+//		JsonData jsonData = JsonMapper.ToObject (json);
+//		XmlSerializer xmlSerializer = new XmlSerializer ();
 	}
 }
