@@ -198,7 +198,7 @@ public class WebCamClient : MonoBehaviour {
 		Debug.Log ("[client]Disconnected");
 	}
 	void OnApplicationQuit () {
-		if (client.Connected)
+		if (client != null && client.Connected)
 			client.Close ();
 	}
 	static public string GetCamIpAddr()
