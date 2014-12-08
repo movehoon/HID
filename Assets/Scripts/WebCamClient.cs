@@ -46,17 +46,7 @@ public class WebCamClient : MonoBehaviour {
 		texture.LoadImage (img);
 		texture.Apply ();
 		UITexture sprite = GetComponentInChildren<UITexture> ();
-		Material tempMat = null;
-		if (sprite.material == null)
-		{
-			tempMat = new Material(Shader.Find("Unlit/Transparent Colored"));
-		}
-		else
-		{
-			tempMat = new Material(sprite.material);
-		}
-		sprite.material = tempMat;
-		tempMat.mainTexture = texture;
+		sprite.material.mainTexture = texture;
 		sprite.MakePixelPerfect();
 		//		renderer.material.mainTexture = texture;
 		//		File.WriteAllBytes ("dst.png", png);
