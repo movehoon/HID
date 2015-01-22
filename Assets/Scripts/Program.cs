@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -24,6 +25,7 @@ public class Program : MonoBehaviour {
 	void Start () {
 		ipaddress.value = GetIpAddr ();
 //		socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+		MakeXml ();
 	}
 
 	public void Connect () {
@@ -104,6 +106,8 @@ public class Program : MonoBehaviour {
 
 	public void MakeXml()
 	{
+		Dictionary<string, string> scenario = new Dictionary<string, string> ();
+
 //		string json = @"
 //			{""state"":
 //				{""id"":""s0"",

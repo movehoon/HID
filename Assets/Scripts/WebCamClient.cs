@@ -81,6 +81,17 @@ public class WebCamClient : MonoBehaviour {
 			return true;
 		return false;
 	}
+
+	public bool IsConnected () {
+		try {
+			if (client.Connected)
+				return true;
+		}
+		catch (Exception e)  {
+			Debug.Log ("WebCamClient::IsConnected -> " + e.ToString ());
+		}
+		return false;
+	}
 	
 	void ConnectToServer_Thread () {
 		Debug.Log ("StartThread");

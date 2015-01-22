@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraResolution : MonoBehaviour {
 
-	public Camera camera;
+//	public Camera camera;
 
 	// Use this for initialization
 	void Start () {
