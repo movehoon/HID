@@ -767,7 +767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &248095927
 Transform:
   m_ObjectHideFlags: 0
@@ -4400,7 +4400,7 @@ MonoBehaviour:
   label: {fileID: 2010200125}
   inputType: 0
   onReturnKey: 1
-  keyboardType: 2
+  keyboardType: 0
   hideInput: 0
   validation: 0
   characterLimit: 0
@@ -4522,7 +4522,7 @@ MonoBehaviour:
   label: {fileID: 477317785}
   inputType: 0
   onReturnKey: 1
-  keyboardType: 2
+  keyboardType: 0
   hideInput: 0
   validation: 0
   characterLimit: 0
@@ -4718,7 +4718,7 @@ MonoBehaviour:
   manualHeight: 1280
   minimumHeight: 480
   maximumHeight: 1536
-  fitWidth: 0
+  fitWidth: 1
   fitHeight: 1
   adjustByDPI: 1
   shrinkPortraitUI: 1
@@ -8100,7 +8100,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: keyboardType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: onReturnKey
@@ -8480,7 +8480,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: keyboardType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 45edf347f9f51214dbfbab27b16fbf01, type: 2}
       propertyPath: onReturnKey
