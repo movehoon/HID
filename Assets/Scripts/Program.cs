@@ -78,6 +78,57 @@ public class Program : MonoBehaviour {
 	public void Behavior5 () {
 		Behavior ("behavior5");
 	}
+
+	public void ChangeRobotState0 () {
+		ChangeRobotState (0);
+	}
+
+	public void ChangeRobotState1 () {
+		ChangeRobotState (1);
+	}
+	
+	public void ChangeRobotState2 () {
+		ChangeRobotState (2);
+	}
+	
+	public void ChangeRobotState3 () {
+		ChangeRobotState (3);
+	}
+	
+	public void ChangeRobotState4 () {
+		ChangeRobotState (4);
+	}
+	
+	public void ChangeRobotState5 () {
+		ChangeRobotState (5);
+	}
+	
+	public void ChangeRobotState6 () {
+		ChangeRobotState (6);
+	}
+	
+	public void ChangeRobotState7 () {
+		ChangeRobotState (7);
+	}
+	
+	public void ChangeRobotState8 () {
+		ChangeRobotState (8);
+	}
+	
+	public void ChangeRobotState9 () {
+		ChangeRobotState (9);
+	}
+	
+	public void ChangeRobotState10 () {
+		ChangeRobotState (10);
+	}
+	
+	void ChangeRobotState (int id) {
+		string jsonString = @"{""state"":""";
+		jsonString += id.ToString ();
+		jsonString += @"""}";
+		Send (jsonString);
+	}
 	
 	void Behavior (string str) {
 		string jsonString = @"{""behavior"":""";
@@ -88,7 +139,8 @@ public class Program : MonoBehaviour {
 
 	void Send (string jsonString) {
 		Debug.Log (jsonString);
-		socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
+		if (socket.Connected)
+			socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
 	}
 
 	static public string GetIpAddr()

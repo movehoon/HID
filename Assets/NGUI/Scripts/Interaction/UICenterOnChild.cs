@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -134,7 +134,8 @@ public class UICenterOnChild : MonoBehaviour
 			// If we're still on the same object
 			if (mCenteredObject != null && mCenteredObject.transform == trans.GetChild(index))
 			{
-				Vector2 totalDelta = UICamera.currentTouch.totalDelta;
+				Vector3 totalDelta = UICamera.currentTouch.totalDelta;
+				totalDelta = transform.rotation * totalDelta;
 
 				float delta = 0f;
 
