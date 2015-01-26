@@ -81,18 +81,22 @@ public class Program : MonoBehaviour {
 
 	public void ChangeRobotState0 () {
 		ChangeRobotState (0);
+		WebCamClient.instance.SetImageCommand (0);
 	}
 
 	public void ChangeRobotState1 () {
 		ChangeRobotState (1);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState2 () {
 		ChangeRobotState (2);
+		WebCamClient.instance.SetImageCommand (2);
 	}
 	
 	public void ChangeRobotState3 () {
 		ChangeRobotState (3);
+		WebCamClient.instance.SetImageCommand (3);
 	}
 	
 	public void ChangeRobotState4 () {

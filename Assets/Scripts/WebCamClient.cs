@@ -12,7 +12,10 @@ public class WebCamClient : MonoBehaviour {
 	public UIInput camIpAddr;
 	public UIButton connectButton;
 	int camPort = 3003;
-	
+
+	public static WebCamClient instance;
+
+
 	enum STATE_RECV {
 		READY,
 		GET_LENGTH,
@@ -27,7 +30,20 @@ public class WebCamClient : MonoBehaviour {
 	bool imgReceived = false;
 	bool mRun = false;
 	string webCamIpAddr;
-	
+	byte imageCommand = 0;
+
+	public void SetImageCommand (byte cmd)
+	{
+		imageCommand = cmd;
+	}
+
+	void Awake () {
+		if (instance == null) 
+		{
+			instance = this;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		texture = new Texture2D (Webcam.WEBCAM_WIDTH/Webcam.ratio, Webcam.WEBCAM_HEIGHT/Webcam.ratio);
@@ -48,6 +64,7 @@ public class WebCamClient : MonoBehaviour {
 		UITexture sprite = GetComponentInChildren<UITexture> ();
 		sprite.material.mainTexture = texture;
 		sprite.MakePixelPerfect();
+		gameObject.transform.localScale = new Vector3 (2.4f, 2.4f, 1);
 		//		renderer.material.mainTexture = texture;
 		//		File.WriteAllBytes ("dst.png", png);
 	}
@@ -114,6 +131,13 @@ public class WebCamClient : MonoBehaviour {
 				{
 				case STATE_RECV.READY:
 				{
+					if (imageCommand > 0)
+					{
+						nNetStream.WriteByte (imageCommand);
+						nNetStream.Flush ();
+						imageCommand = 0;
+					}
+
 					if (!imgReceived) 
 					{
 						Debug.Log ("[client]READY");
