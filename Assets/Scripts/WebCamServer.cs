@@ -20,7 +20,9 @@ public class WebCamServer : MonoBehaviour {
 	TcpListener server = null;
 	Thread thread;
 	bool mRunning;
-	
+
+	byte imgCommand = 0;
+
 	void Awake () {
 		thread = new Thread(new ThreadStart(TcpListener_Co));
 		thread.Start();
@@ -33,7 +35,7 @@ public class WebCamServer : MonoBehaviour {
 		if (webcam != null)
 			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
 	}
-	
+
 	void TcpListener_Co () {
 		mRunning = true;
 		try {
@@ -76,6 +78,10 @@ public class WebCamServer : MonoBehaviour {
 							stream.Flush ();
 						}
 						Thread.Sleep (10);
+					}
+					else if( inByte[0] > 0) {
+						imgCommand = inByte[0];
+						Debug.Log ("Get " + imgCommand.ToString ());
 					}
 				}
 				client.Close ();
@@ -120,6 +126,25 @@ public class WebCamServer : MonoBehaviour {
 //			imgBytes = texture.EncodeToPNG ();
 //			File.WriteAllBytes ("src.jpg", imgBytes);
 		}
+
+		if (imgCommand > 0)
+		{
+			Debug.Log ("Update Get " + imgCommand.ToString ());
+			switch(imgCommand)
+			{
+			case 1:
+				ImgManager.instance.ShowImage0 ();
+				break;
+			case 2:
+				ImgManager.instance.ShowImage1 ();
+				break;
+			case 3:
+				ImgManager.instance.ShowImage2 ();
+				break;
+			}
+			imgCommand = 0;
+		}
+
 	}
 	
 	public void stopListening() {
