@@ -366,7 +366,7 @@ GameObject:
   - 65: {fileID: 56051610}
   - 114: {fileID: 56051613}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -693,7 +693,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &248095927
 Transform:
   m_ObjectHideFlags: 0
@@ -751,7 +751,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3006
+  startingRenderQueue: 3007
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -1757,7 +1757,7 @@ GameObject:
   - 65: {fileID: 438127511}
   - 114: {fileID: 438127514}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2328,7 +2328,7 @@ GameObject:
   - 65: {fileID: 611357151}
   - 114: {fileID: 611357153}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2558,7 +2558,7 @@ GameObject:
   - 65: {fileID: 646524339}
   - 114: {fileID: 646524342}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2975,7 +2975,7 @@ GameObject:
   - 65: {fileID: 937079150}
   - 114: {fileID: 937079153}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3708,7 +3708,7 @@ Transform:
   m_GameObject: {fileID: 1014327002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00156250002, y: .00156250002, z: .00156250002}
+  m_LocalScale: {x: .00156128022, y: .00156128022, z: .00156128022}
   m_Children:
   - {fileID: 1981064712}
   - {fileID: 293623402}
@@ -3716,6 +3716,7 @@ Transform:
   - {fileID: 248095927}
   - {fileID: 1397436415}
   - {fileID: 1358857590}
+  - {fileID: 1647110592}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!54 &1014327004
@@ -3790,12 +3791,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scalingStyle: 1
-  manualWidth: 720
+  manualWidth: 800
   manualHeight: 1280
   minimumHeight: 480
   maximumHeight: 1536
   fitWidth: 1
-  fitHeight: 1
+  fitHeight: 0
   adjustByDPI: 1
   shrinkPortraitUI: 1
 --- !u!1 &1071883157
@@ -3889,7 +3890,7 @@ GameObject:
   - 65: {fileID: 1159845161}
   - 114: {fileID: 1159845164}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4329,7 +4330,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1397436414}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 46, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 611357149}
@@ -4407,11 +4408,11 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3004
+  startingRenderQueue: 3005
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
-  mClipRange: {x: 0, y: -303.5, z: 799.374146, w: 765}
+  mClipRange: {x: 0, y: -257.75, z: 799.998657, w: 765.5}
   mClipSoftness: {x: 4, y: 4}
   mDepth: 1
   mSortingOrder: 0
@@ -4839,7 +4840,7 @@ GameObject:
   - 65: {fileID: 1490337299}
   - 114: {fileID: 1490337302}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5003,7 +5004,7 @@ GameObject:
   - 65: {fileID: 1513214400}
   - 114: {fileID: 1513214403}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5397,6 +5398,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1 &1647110591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1647110592}
+  - 114: {fileID: 1647110593}
+  m_Layer: 8
+  m_Name: BG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1647110592
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647110591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1014327003}
+  m_RootOrder: 6
+--- !u!114 &1647110593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647110591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: .75152123, g: .742647052, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 800
+  mHeight: 1280
+  mDepth: 1
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: .625
+  mType: 2
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: 62adb30369acbf943a67cee0f69267a3, type: 2}
+  mSpriteName: Stripes 2
+  mFillCenter: 1
 --- !u!1 &1678717659
 GameObject:
   m_ObjectHideFlags: 0
@@ -5861,7 +5940,7 @@ GameObject:
   - 65: {fileID: 1936123270}
   - 114: {fileID: 1936123273}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6308,7 +6387,7 @@ GameObject:
   - 65: {fileID: 2013176616}
   - 114: {fileID: 2013176619}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: STATE5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

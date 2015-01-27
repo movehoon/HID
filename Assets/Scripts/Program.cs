@@ -81,52 +81,54 @@ public class Program : MonoBehaviour {
 
 	public void ChangeRobotState0 () {
 		ChangeRobotState (0);
-		WebCamClient.instance.SetImageCommand (0);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 
 	public void ChangeRobotState1 () {
 		ChangeRobotState (1);
-		WebCamClient.instance.SetImageCommand (1);
+		WebCamClient.instance.SetImageCommand (2);
 	}
 	
 	public void ChangeRobotState2 () {
 		ChangeRobotState (2);
-		WebCamClient.instance.SetImageCommand (2);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState3 () {
 		ChangeRobotState (3);
-		WebCamClient.instance.SetImageCommand (3);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState4 () {
 		ChangeRobotState (4);
+		WebCamClient.instance.SetImageCommand (3);
 	}
 	
 	public void ChangeRobotState5 () {
 		ChangeRobotState (5);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState6 () {
 		ChangeRobotState (6);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState7 () {
 		ChangeRobotState (7);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState8 () {
 		ChangeRobotState (8);
+		WebCamClient.instance.SetImageCommand (1);
 	}
 	
 	public void ChangeRobotState9 () {
 		ChangeRobotState (9);
+		WebCamClient.instance.SetImageCommand (1);
 	}
-	
-	public void ChangeRobotState10 () {
-		ChangeRobotState (10);
-	}
-	
+
 	void ChangeRobotState (int id) {
 		string jsonString = @"{""state"":""";
 		jsonString += id.ToString ();
