@@ -18,6 +18,7 @@ public class Program : MonoBehaviour {
 	public UIInput ipaddress;
 	public UIInput speakText;
 	public UIButton connectButton;
+	public UIInput nState;
 	int port = 2223;
 
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -77,6 +78,11 @@ public class Program : MonoBehaviour {
 	
 	public void Behavior5 () {
 		Behavior ("behavior5");
+	}
+
+	public void ChangeRobotStateN() {
+		int n = Convert.ToInt32(nState.value);
+		ChangeRobotState (n);
 	}
 
 	public void ChangeRobotState0 () {
@@ -177,5 +183,10 @@ public class Program : MonoBehaviour {
 //			}";
 //		JsonData jsonData = JsonMapper.ToObject (json);
 //		XmlSerializer xmlSerializer = new XmlSerializer ();
+	}
+
+	public void ReloadScene ()
+	{
+		Application.LoadLevel (0);
 	}
 }
