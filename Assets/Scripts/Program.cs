@@ -15,6 +15,7 @@ public class Program : MonoBehaviour {
 
 	public const string Key_IpAddr = "Key_IpAddr";
 
+	public GameObject connectionDialog;
 	public UIInput ipaddress;
 	public UIInput speakText;
 	public UIButton connectButton;
@@ -24,6 +25,7 @@ public class Program : MonoBehaviour {
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 	void Start () {
+		connectionDialog.SetActive (true);
 		ipaddress.value = GetIpAddr ();
 //		socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 		MakeXml ();
@@ -135,7 +137,7 @@ public class Program : MonoBehaviour {
 		WebCamClient.instance.SetImageCommand (1);
 	}
 
-	void ChangeRobotState (int id) {
+	public void ChangeRobotState (int id) {
 		string jsonString = @"{""state"":""";
 		jsonString += id.ToString ();
 		jsonString += @"""}";

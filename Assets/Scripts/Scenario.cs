@@ -2,23 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Scenario {
+[System.Serializable]
+public class Data {
+	public State states;
+}
 
-	List<Data> _data = new List<Data> ();
+[System.Serializable]
+public class State {
+	public int id;
+	public string detail;
+}
 
+class Action {
+}
 
-	class Data {
-	}
-	
+class Condition {
+}
 
-	class State {
-	}
+public class Scenario : MonoBehaviour {
 
-	class Action {
-		
-	}
-
-	class Condition {
-
-	}
+	public List<State> data = new List<State> ();
 }
