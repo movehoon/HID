@@ -79,7 +79,7 @@ public class WebCamServer : MonoBehaviour {
 						}
 						Thread.Sleep (10);
 					}
-					else if( inByte[0] > 0) {
+					else if (inByte[0] > 0) {
 						imgCommand = inByte[0];
 						Debug.Log ("Get " + imgCommand.ToString ());
 					}
@@ -129,22 +129,22 @@ public class WebCamServer : MonoBehaviour {
 
 		if (imgCommand > 0)
 		{
+			ImgManager.instance.ShowImage(imgCommand);
 			Debug.Log ("Update Get " + imgCommand.ToString ());
-			switch(imgCommand)
-			{
-			case 1:
-				ImgManager.instance.ShowImage0 ();
-				break;
-			case 2:
-				ImgManager.instance.ShowImage1 ();
-				break;
-			case 3:
-				ImgManager.instance.ShowImage2 ();
-				break;
-			}
+//			switch(imgCommand)
+//			{
+//			case 1:
+//				ImgManager.instance.ShowImage0 ();
+//				break;
+//			case 2:
+//				ImgManager.instance.ShowImage1 ();
+//				break;
+//			case 3:
+//				ImgManager.instance.ShowImage2 ();
+//				break;
+//			}
 			imgCommand = 0;
 		}
-
 	}
 	
 	public void stopListening() {

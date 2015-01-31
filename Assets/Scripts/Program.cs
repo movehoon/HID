@@ -82,9 +82,10 @@ public class Program : MonoBehaviour {
 		Behavior ("behavior5");
 	}
 
-	public void ChangeRobotStateN() {
-		int n = Convert.ToInt32(nState.value);
+	public void ChangeRobotStateN(byte n) {
 		ChangeRobotState (n);
+		WebCamClient.instance.SetImageCommand (n);
+		Debug.Log ("Change state to : " + n.ToString ());
 	}
 
 	public void ChangeRobotState0 () {
@@ -137,7 +138,7 @@ public class Program : MonoBehaviour {
 		WebCamClient.instance.SetImageCommand (1);
 	}
 
-	public void ChangeRobotState (int id) {
+	public void ChangeRobotState (byte id) {
 		string jsonString = @"{""state"":""";
 		jsonString += id.ToString ();
 		jsonString += @"""}";
@@ -152,9 +153,13 @@ public class Program : MonoBehaviour {
 	}
 
 	void Send (string jsonString) {
+		try {
+			if (socket.Connected)
+				socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
+		} catch (Exception e) {
+			Debug.Log (e.ToString ());
+		}
 		Debug.Log (jsonString);
-		if (socket.Connected)
-			socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
 	}
 
 	static public string GetIpAddr()

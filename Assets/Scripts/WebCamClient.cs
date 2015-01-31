@@ -25,7 +25,7 @@ public class WebCamClient : MonoBehaviour {
 	
 	Texture2D texture;
 
-	TcpClient client;
+	TcpClient client = new TcpClient ();
 	byte[] imgBytes;
 	bool imgReceived = false;
 	bool mRun = false;
@@ -118,7 +118,6 @@ public class WebCamClient : MonoBehaviour {
 		DateTime startTime;
 		
 		client = new TcpClient ();
-		Debug.Log ("StartThread 2 " + webCamIpAddr);
 		client.Connect (IPAddress.Parse (webCamIpAddr), camPort);
 		NetworkStream nNetStream = client.GetStream ();
 		nNetStream.ReadTimeout = 10;
@@ -140,7 +139,7 @@ public class WebCamClient : MonoBehaviour {
 
 					if (!imgReceived) 
 					{
-						Debug.Log ("[client]READY");
+						Debug.Log ("[client] READY");
 						nNetStream.WriteByte (100);
 						nNetStream.Flush ();
 						state = STATE_RECV.GET_LENGTH;
@@ -149,7 +148,7 @@ public class WebCamClient : MonoBehaviour {
 				}
 				case STATE_RECV.GET_LENGTH:
 				{
-					Debug.Log ("[client]GET_LENGTH");
+					Debug.Log ("[client] GET_LENGTH");
 					byte[] bytes = new byte[4];
 					try
 					{
@@ -175,7 +174,7 @@ public class WebCamClient : MonoBehaviour {
 				}
 				case STATE_RECV.GET_IMG:
 				{
-					Debug.Log ("[client]GET_IMG");
+					Debug.Log ("[client] GET_IMG");
 					if (client.Available < imgLength) {
 						if ((DateTime.Now - startTime).Milliseconds > 10)
 							state = STATE_RECV.Fail;
