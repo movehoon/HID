@@ -17,7 +17,7 @@ public class Program : MonoBehaviour {
 
 	public GameObject connectionDialog;
 	public UIInput ipaddress;
-	public UIInput speakText;
+//	public UIInput speakText;
 	public UIButton connectButton;
 	public UIInput nState;
 	int port = 2223;
@@ -39,8 +39,11 @@ public class Program : MonoBehaviour {
 				SetIpAddr(ipaddress.value);
 				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
 				socket.Connect(endpoint);
-				UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
-				label.text = "Disconnect";
+				if (socket.Connected)
+				{
+					UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
+					label.text = "Disconnect";
+				}
 			}
 			else
 			{
@@ -55,92 +58,36 @@ public class Program : MonoBehaviour {
 		}
 	}
 
-	public void Speak () {
-		string jsonString = @"{""dialog"":""";
-		jsonString += speakText.value;
-		jsonString += @"""}";
+	public void Test () {
+		string jsonString = @"{""state"":""1""}";
 		Send (jsonString);
 	}
 
-	public void Behavior1 () {
-		Behavior ("behavior1");
+	public void ArrowUp () {
+		ChangeRobotStateN (12);
 	}
-	
-	public void Behavior2 () {
-		Behavior ("behavior2");
+	public void ArrowDown () {
+		ChangeRobotStateN (13);
 	}
-	
-	public void Behavior3 () {
-		Behavior ("behavior3");
+	public void ArrowLeft () {
+		ChangeRobotStateN (14);
 	}
-	
-	public void Behavior4 () {
-		Behavior ("behavior4");
-	}
-	
-	public void Behavior5 () {
-		Behavior ("behavior5");
+	public void ArrowRight () {
+		ChangeRobotStateN (15);
 	}
 
-	public void ChangeRobotStateN(byte n) {
-		ChangeRobotState (n);
-		WebCamClient.instance.SetImageCommand (n);
-		Debug.Log ("Change state to : " + n.ToString ());
-	}
-
-	public void ChangeRobotState0 () {
-		ChangeRobotState (0);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-
-	public void ChangeRobotState1 () {
-		ChangeRobotState (1);
-		WebCamClient.instance.SetImageCommand (2);
+	public void ChangeRobotStateN(byte state, byte substate = 1) {
+		ChangeRobotState (state, substate);
+		byte imageCommand = (byte)(state * 10 + substate);
+		WebCamClient.instance.SetImageCommand (imageCommand);
+		Debug.Log ("Change state to : " + state.ToString () + "-" + substate.ToString ());
 	}
 	
-	public void ChangeRobotState2 () {
-		ChangeRobotState (2);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState3 () {
-		ChangeRobotState (3);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState4 () {
-		ChangeRobotState (4);
-		WebCamClient.instance.SetImageCommand (3);
-	}
-	
-	public void ChangeRobotState5 () {
-		ChangeRobotState (5);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState6 () {
-		ChangeRobotState (6);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState7 () {
-		ChangeRobotState (7);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState8 () {
-		ChangeRobotState (8);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-	
-	public void ChangeRobotState9 () {
-		ChangeRobotState (9);
-		WebCamClient.instance.SetImageCommand (1);
-	}
-
-	public void ChangeRobotState (byte id) {
+	public void ChangeRobotState (byte state, byte substate) {
 		string jsonString = @"{""state"":""";
-		jsonString += id.ToString ();
+		jsonString += state.ToString ();
+		jsonString += @""", ""substate"":""";
+		jsonString += substate.ToString ();
 		jsonString += @"""}";
 		Send (jsonString);
 	}
@@ -154,12 +101,18 @@ public class Program : MonoBehaviour {
 
 	void Send (string jsonString) {
 		try {
-			if (socket.Connected)
+//			if (socket.Connected)
+//			{
 				socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
+				Debug.Log (jsonString);
+//			}
+//			else
+//			{
+//				Debug.Log ("Socket is not connected");
+//			}
 		} catch (Exception e) {
 			Debug.Log (e.ToString ());
 		}
-		Debug.Log (jsonString);
 	}
 
 	static public string GetIpAddr()

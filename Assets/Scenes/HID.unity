@@ -1371,9 +1371,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eadaecf3be5a346bbb61927c04f62983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectionDialog: {fileID: 0}
   ipaddress: {fileID: 1003654216}
   speakText: {fileID: 851831674}
   connectButton: {fileID: 592387372}
+  nState: {fileID: 0}
 --- !u!65 &592387371
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2448,7 +2450,7 @@ Transform:
   m_GameObject: {fileID: 1014327002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .00260078022, y: .00260078022, z: .00260078022}
   m_Children:
   - {fileID: 1981064712}
   - {fileID: 592387369}
@@ -3702,6 +3704,7 @@ MonoBehaviour:
   scrollAxisName: Mouse ScrollWheel
   verticalAxisName: Vertical
   horizontalAxisName: Horizontal
+  commandClick: 1
   submitKey0: 13
   submitKey1: 330
   cancelKey0: 27

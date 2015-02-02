@@ -9,10 +9,15 @@ public class ImgManager : MonoBehaviour {
 	public GameObject texture;
 	public List<Texture> textures = new List<Texture> ();
 
+	public float SlideTimeSec = 4f;
+
 	public void ShowImage (int n)
 	{
 		switch (n) 
 		{
+		case 0:
+			SetImage (textures[0]);
+			break;
 		case 15:
 			SetImage (textures[1]);
 			break;
@@ -48,7 +53,7 @@ public class ImgManager : MonoBehaviour {
 			break;
 		case 56:
 			SetImage (textures[12]);
-			Invoke ("ShowFanfare", 1f);
+			Invoke ("ShowFanfare", 2f);
 			break;
 		case 84:
 			count = 11;
@@ -76,7 +81,9 @@ public class ImgManager : MonoBehaviour {
 		SetImage (textures [imageIndex++]);
 		count--;
 		if (count > 0)
-			Invoke ("ShowCountdownImage",1f);
+			Invoke ("ShowCountdownImage", SlideTimeSec);
+		else
+			SetImage (textures [0]);
 	}
 
 	void Awake ()

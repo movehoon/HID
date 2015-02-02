@@ -686,6 +686,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 6d7510b22b4fc4aafbe39107ed794cb4, type: 3}
   - {fileID: 2800000, guid: 4f1ef216e928542daa5b4fbf4588a50b, type: 3}
   - {fileID: 2800000, guid: 4ac3402bbbccb400c88a21cf760252ae, type: 3}
+  SlideTimeSec: 4
 --- !u!1 &1119202200
 GameObject:
   m_ObjectHideFlags: 0

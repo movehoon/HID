@@ -6,6 +6,13 @@ using System.Collections.Generic;
 public class SimpleState {
 	public int id;
 	public string detail;
+	public List<SimpleSubstate> substates = new List<SimpleSubstate> ();
+}
+
+[System.Serializable]
+public class SimpleSubstate {
+	public int id;
+	public string detail;
 }
 
 public class StateManager : MonoBehaviour {
