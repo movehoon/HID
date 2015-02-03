@@ -30,10 +30,15 @@ public class WebCamServer : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
 		webcam = new WebCamTexture (WEBCAM_WIDTH, WEBCAM_HEIGHT, 10);
+		if (WebCamTexture.devices.Length > 1) 
+		{
+			webcam.deviceName = WebCamTexture.devices [1].name;
+		}
 		webcam.Play ();
 		if (webcam != null)
-			texture = new Texture2D (WEBCAM_WIDTH/ratio, WEBCAM_HEIGHT/ratio);
+			texture = new Texture2D (WEBCAM_WIDTH / ratio, WEBCAM_HEIGHT / ratio);
 	}
 
 	void TcpListener_Co () {

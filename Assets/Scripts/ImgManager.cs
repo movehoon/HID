@@ -12,7 +12,12 @@ public class ImgManager : MonoBehaviour {
 	public UITexture before;
 	public UITexture after;
 
-	public float SlideTimeSec = 5f;
+	public float SlideTimeSec = 4f;
+
+	public void TestImgCommand ()
+	{
+		ShowImage (15);
+	}
 
 	public void ShowReadyImage ()
 	{
@@ -98,12 +103,12 @@ public class ImgManager : MonoBehaviour {
 	void ShowOrganizeMethodSize ()
 	{
 		SetImage (textures[3]);
-		Invoke ("ShowOrganizeMethodColor", 3f);
+		Invoke ("ShowOrganizeMethodColor", 1.5f);
 	}
 	void ShowOrganizeMethodColor ()
 	{
 		SetImage (textures[4]);
-		Invoke ("ShowOrganizeMethodSize", 2f);
+		Invoke ("ShowOrganizeMethod", 2f);
 	}
 	void ShowOrganizeMethod ()
 	{
