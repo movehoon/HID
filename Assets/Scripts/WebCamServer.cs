@@ -10,7 +10,7 @@ public class WebCamServer : MonoBehaviour {
 	public const int WEBCAM_WIDTH = 1280;
 	public const int WEBCAM_HEIGHT = 720;
 	public const int ratio = 4;
-	
+
 //	public Image webCamImage;
 	
 	WebCamTexture webcam = null;
@@ -131,22 +131,38 @@ public class WebCamServer : MonoBehaviour {
 		{
 			ImgManager.instance.ShowImage(imgCommand);
 			Debug.Log ("Update Get " + imgCommand.ToString ());
-//			switch(imgCommand)
-//			{
-//			case 1:
-//				ImgManager.instance.ShowImage0 ();
-//				break;
-//			case 2:
-//				ImgManager.instance.ShowImage1 ();
-//				break;
-//			case 3:
-//				ImgManager.instance.ShowImage2 ();
-//				break;
-//			}
+			switch(imgCommand)
+			{
+			case 14:
+				SaveWebcam("before.png");
+				break;
+			case 102:
+			case 111:
+				SaveWebcam("after.png");
+				break;
+			}
 			imgCommand = 0;
 		}
 	}
-	
+
+	void SaveWebcam(string name)
+	{
+		const int ratio = 2;
+		Texture2D texture = new Texture2D(webcam.width/ratio, webcam.height/ratio);
+		for (int y = 0 ; y < webcam.height ; y+=ratio)
+		{
+			for (int x = 0 ; x < webcam.width ; x+=ratio)
+			{
+				Color color = webcam.GetPixel(x, y);
+				texture.SetPixel(x/ratio, y/ratio, color); 
+			}
+		}
+//		snap.SetPixels(webcam.GetPixels());
+		texture.Apply();
+		System.IO.File.WriteAllBytes(Application.dataPath + "/" + name, texture.EncodeToPNG());
+		Debug.Log ("Save webcam to " + name);
+	}
+
 	public void stopListening() {
 		mRunning = false;
 		server.Stop ();

@@ -5,8 +5,7 @@ public class WebCamConnectionChecker : MonoBehaviour {
 
 	public WebCamClient webCamClient;
 
-	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		UISprite sprite = GetComponentInChildren <UISprite> ();
 		if (webCamClient.IsConnected ())
 			sprite.color = new Color (0, 0, 255);

@@ -679,6 +679,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 304228329}
   - 114: {fileID: 304228330}
+  - 114: {fileID: 304228331}
   m_Layer: 8
   m_Name: Robot Monitor
   m_TagString: Untagged
@@ -749,6 +750,18 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Smooth
   mFillCenter: 1
+--- !u!114 &304228331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 304228328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c48afeb7d6854f869b4dbd34a389122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  program: {fileID: 29644721}
 --- !u!1 &322003653
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,7 +2496,7 @@ Transform:
   m_GameObject: {fileID: 1014327002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00156128022, y: .00156128022, z: .00156128022}
+  m_LocalScale: {x: .00156250002, y: .00156250002, z: .00156250002}
   m_Children:
   - {fileID: 1981064712}
   - {fileID: 293623402}
@@ -2572,8 +2585,8 @@ MonoBehaviour:
   manualHeight: 1280
   minimumHeight: 480
   maximumHeight: 1536
-  fitWidth: 1
-  fitHeight: 0
+  fitWidth: 0
+  fitHeight: 1
   adjustByDPI: 1
   shrinkPortraitUI: 1
 --- !u!1 &1020754537
@@ -2598,7 +2611,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1020754537}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.65400982, y: -9.31565285, z: 0}
+  m_LocalPosition: {x: 25, y: -9, z: 0}
   m_LocalScale: {x: 640.5, y: 640.5, z: 640.5}
   m_Children:
   - {fileID: 1762295441}
@@ -3092,7 +3105,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 29644721}
+    mMethodName: ReloadScene
+    mParameters: []
+    oneShot: 0
 --- !u!65 &1358857593
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3202,7 +3219,7 @@ MonoBehaviour:
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
-  mClipRange: {x: 0, y: -7.75, z: 799.998657, w: 750}
+  mClipRange: {x: 0, y: -7.25, z: 2048, w: 750}
   mClipSoftness: {x: 4, y: 4}
   mDepth: 1
   mSortingOrder: 0
@@ -3688,10 +3705,14 @@ MonoBehaviour:
     detail: "\uC815\uB9AC\uACA9\uB824"
     substates:
     - id: 1
-      detail: "\uBE14\uB7ED\uC950\uAE30"
+      detail: "\uC190\uB0B4\uBC00\uAE30"
     - id: 2
-      detail: "\uC815\uB9AC\uC2DC\uC791\uACA9\uB824"
+      detail: "\uBE14\uB7ED\uC950\uAE30"
     - id: 3
+      detail: "\uBE14\uB7ED\uB193\uAE30"
+    - id: 4
+      detail: "\uC815\uB9AC\uB3C4\uC911\uACA9\uB824"
+    - id: 5
       detail: "\uC815\uB9AC\uB3C4\uC911\uACA9\uB824"
   - id: 3
     detail: "\uC815\uB9AC\uAD8C\uC720"

@@ -31,6 +31,16 @@ public class Program : MonoBehaviour {
 		MakeXml ();
 	}
 
+	public bool IsConnected () {
+		try {
+			return socket.Connected;
+		}
+		catch (Exception e)  {
+			Debug.Log ("Program::IsConnected -> " + e.ToString ());
+		}
+		return false;
+	}
+
 	public void Connect () {
 		try 
 		{

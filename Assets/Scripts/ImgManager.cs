@@ -9,7 +9,15 @@ public class ImgManager : MonoBehaviour {
 	public GameObject texture;
 	public List<Texture> textures = new List<Texture> ();
 
-	public float SlideTimeSec = 4f;
+	public UITexture before;
+	public UITexture after;
+
+	public float SlideTimeSec = 5f;
+
+	public void ShowReadyImage ()
+	{
+		SetImage (textures[0]);
+	}
 
 	public void ShowImage (int n)
 	{
@@ -19,7 +27,7 @@ public class ImgManager : MonoBehaviour {
 			SetImage (textures[0]);
 			break;
 		case 15:
-			SetImage (textures[1]);
+			Invoke ("ShowOrganizeMethodShape", 7f);
 			break;
 		case 16:
 			SetImage (textures[2]);
@@ -55,10 +63,18 @@ public class ImgManager : MonoBehaviour {
 			SetImage (textures[12]);
 			Invoke ("ShowFanfare", 2f);
 			break;
+		case 61:
+			SetImage (textures[25]);
+			break;
 		case 84:
 			count = 11;
 			imageIndex = 13;
 			ShowCountdownImage ();
+			break;
+		case 102:
+		case 111:
+			// TODO: Show before and after image
+			Invoke ("ShowBeforeAfter", 2f);
 			break;
 		}
 	}
@@ -74,6 +90,80 @@ public class ImgManager : MonoBehaviour {
 		tx.mainTexture = tex;
 	}
 
+	void ShowOrganizeMethodShape ()
+	{
+		SetImage (textures[2]);
+		Invoke ("ShowOrganizeMethodSize", 1.5f);
+	}
+	void ShowOrganizeMethodSize ()
+	{
+		SetImage (textures[3]);
+		Invoke ("ShowOrganizeMethodColor", 3f);
+	}
+	void ShowOrganizeMethodColor ()
+	{
+		SetImage (textures[4]);
+		Invoke ("ShowOrganizeMethodSize", 2f);
+	}
+	void ShowOrganizeMethod ()
+	{
+		SetImage (textures[1]);
+	}
+
+	public void ShowBeforeAfter ()
+	{
+		SetImage (textures[24]);
+
+		before.gameObject.SetActive (true);
+		Material tempMat = null;
+		if (before.material == null)
+		{
+			tempMat = new Material(Shader.Find("Unlit/Transparent Colored"));
+		}
+		else
+		{
+			tempMat = new Material(before.material);
+		}
+		before.material = tempMat;
+		before.mainTexture = LoadPNG (Application.dataPath + "/before.png");
+		before.MakePixelPerfect();
+		
+		after.gameObject.SetActive (true);
+		if (after.material == null)
+		{
+			tempMat = new Material(Shader.Find("Unlit/Transparent Colored"));
+		}
+		else
+		{
+			tempMat = new Material(after.material);
+		}
+		after.material = tempMat;
+		after.mainTexture  = LoadPNG (Application.dataPath + "/after.png");
+		after.MakePixelPerfect();
+		
+		Invoke ("HideBeforeAfter", 15f);
+	}
+	
+	void HideBeforeAfter ()
+	{
+		before.gameObject.SetActive (false);
+		after.gameObject.SetActive (false);
+		ShowReadyImage();
+	}
+	
+	static Texture2D LoadPNG(string filePath) {
+		
+		Texture2D tex = null;
+		byte[] fileData;
+		
+		if (System.IO.File.Exists(filePath))     {
+			fileData = System.IO.File.ReadAllBytes(filePath);
+			tex = new Texture2D(2, 2);
+			tex.LoadImage(fileData);
+		}
+		return tex;
+	}
+
 	int count;
 	int imageIndex;
 	void ShowCountdownImage()
@@ -83,7 +173,7 @@ public class ImgManager : MonoBehaviour {
 		if (count > 0)
 			Invoke ("ShowCountdownImage", SlideTimeSec);
 		else
-			SetImage (textures [0]);
+			Invoke ("ShowReadyImage", SlideTimeSec);
 	}
 
 	void Awake ()
