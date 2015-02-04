@@ -22,4 +22,8 @@ public class WebCamServerApp : MonoBehaviour {
 	public void Reset () {
 		Application.LoadLevel (0);
 	}
+
+	public void Exit () {
+		Application.Quit ();
+	}
 }

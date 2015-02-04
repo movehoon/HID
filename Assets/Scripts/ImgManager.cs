@@ -14,9 +14,11 @@ public class ImgManager : MonoBehaviour {
 
 	public float SlideTimeSec = 4f;
 
+	public AudioClip audioClip;
+
 	public void TestImgCommand ()
 	{
-		ShowImage (15);
+		ShowImage (44);
 	}
 
 	public void ShowReadyImage ()
@@ -50,7 +52,10 @@ public class ImgManager : MonoBehaviour {
 			SetImage (textures[6]);
 			break;
 		case 44:
-			SetImage (textures[7]);
+			ShowFanfare();
+			break;
+		case 51:
+			SetImage (textures[26]);
 			break;
 		case 52:
 			SetImage (textures[8]);
@@ -66,7 +71,7 @@ public class ImgManager : MonoBehaviour {
 			break;
 		case 56:
 			SetImage (textures[12]);
-			Invoke ("ShowFanfare", 2f);
+			Invoke ("ShowFanfare", 3f);
 			break;
 		case 61:
 			SetImage (textures[25]);
@@ -87,6 +92,7 @@ public class ImgManager : MonoBehaviour {
 	void ShowFanfare ()
 	{
 		SetImage (textures[7]);
+		AudioSource.PlayClipAtPoint (audioClip, Vector3.zero);
 	}
 
 	public void SetImage(Texture tex)
