@@ -25,15 +25,33 @@ public class ProgramForRos : MonoBehaviour {
 
 	string rosConnection = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
 	string rosCallService = @"{""op"":""call_service"", ""service"":""memory_monitor/write_to_memory"",""args"":""memory_monitor/RequestHIDInput""}";
-	string rosReceivedMessage = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": face_detector/face_detected, \""query\"": {\""detected\"": true}"", ""header"": {""stamp"": {""secs"": 1426150585, ""nsecs"": 582812070}, ""frame_id"": "" "", ""seq"": 1}}, ""op"": ""publish""}";
+	string rosReceivedMessage3 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detector/face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": true}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+	string rosReceivedMessage4 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detector/face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": false}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+
+	string rosFaceDetectTrue = @"{""op"":""call_service"", ""service"":""/memory_monitor/write_to_memory"", ""args"":{""data"": ""{'event_name': 'face_detector/face_detected', 'detected': 'true'}"", ""by"": ""HID""}}";
+	string rosFaceDetectFalse = @"{""op"":""call_service"", ""service"":""/memory_monitor/write_to_memory"", ""args"":{""data"": ""{'event_name': 'face_detector/face_detected', 'detected': 'false'}"", ""by"": ""HID""}}";
+
+	string receivedMessage = "";
 
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+	bool faceDetected = true;
 	
 	void Start () {
 		connectionDialog.SetActive (true);
 		ipaddress.value = GetIpAddr ();
 	}
-	
+
+	void Update () {
+		UIFaceDetected (faceDetected);
+		if (receivedMessage.Length > 0) {
+			string parseText = receivedMessage;
+			receivedMessage = "";
+			Debug.Log ("Decode: " + parseText);
+			Parsing (parseText);
+		}
+	}
+
 	public bool IsConnected () {
 		try {
 			return socket.Connected;
@@ -43,12 +61,49 @@ public class ProgramForRos : MonoBehaviour {
 		}
 		return false;
 	}
+
+	void Parsing (string jsonString) {
+		try
+		{
+			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
+			JsonData json = JsonMapper.ToObject (jsonString);
+			Debug.Log ("Json: " + jsonString);
+			string topic = json ["topic"].ToString ();
+			string msg = json ["msg"]["msg"].ToString ();
+			Debug.Log ("Json msg: " + msg);
+			string query = JsonMapper.ToObject(msg)["query"].ToString ();
+			query = jsonRefine(query);
+			Debug.Log ("Json query: " + query);
+			string detected = JsonMapper.ToObject(query)["face_detected.detected"].ToString ();
+			faceDetected = (detected == "True") ? true : false;
+			Debug.Log ("Json Parse: " + topic + ", detected: " + detected);
+		}
+		catch (Exception ex)
+		{
+			Debug.Log (ex.ToString ());
+		}
+	}
+
+	string jsonRefine (string inString)
+	{
+		if (inString[0] == '"' && inString[inString.Length-1] == '"')
+			inString = inString.Substring (1, inString.Length-2);
+		return inString.Replace("\\\"", "\"");
+	}
+
+	void UIFaceDetected (bool detected) {
+		if (uiBool == null)
+			return;
+
+		uiBool.GetComponentInChildren<UiBoolManager> ().SetState (detected);
+	}
 	
 	public void Connect () {
 		try 
 		{
 			if (!socket.Connected)
 			{
+#if true
 				SetIpAddr(ipaddress.value);
 				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
 				socket.Connect(endpoint);
@@ -58,7 +113,7 @@ public class ProgramForRos : MonoBehaviour {
 					label.text = "Disconnect";
 				}
 				Send (rosConnection);
-
+#endif
 				mRun = true;
 				Thread thread = new Thread (new ThreadStart (Process_Thread));
 				thread.Start ();
@@ -83,17 +138,29 @@ public class ProgramForRos : MonoBehaviour {
 		socket.Close ();
 	}
 
+	bool threadWriting = false;
 	void Process_Thread () {
 		byte[] bytes = new byte[2048];
 		while (mRun)
 		{
+			#if false
+			Thread.Sleep (1000);
+			receivedMessage = rosReceivedMessage4;
+			Debug.Log("Received: " + receivedMessage);
+			Parsing (receivedMessage);
+			#else
 			if (socket.Connected)
 			{
 				int nRead = socket.Receive(bytes);
-				Debug.Log(Encoding.UTF8.GetString(bytes));
 				if (nRead <= 0)
 				{
 					socket.Close ();
+				}
+				lock (receivedMessage)
+				{
+				receivedMessage = Encoding.Default.GetString (bytes);
+				receivedMessage = receivedMessage.Substring(0, nRead);
+				Debug.Log("length: " + nRead + ", Received: " + receivedMessage);
 				}
 			}
 			else
@@ -101,6 +168,7 @@ public class ProgramForRos : MonoBehaviour {
 				Debug.Log ("Socket is disconnected");
 				Disconnect ();
 			}
+			#endif
 			Thread.Sleep(1);
 		}
 	}
@@ -121,12 +189,24 @@ public class ProgramForRos : MonoBehaviour {
 //		ChangeRobotStateN (13);
 	}
 	public void ArrowLeft () {
-		ChangeRobotStateN (14);
+		Parsing (rosReceivedMessage3);
+//		ChangeRobotStateN (14);
 	}
 	public void ArrowRight () {
-		ChangeRobotStateN (15);
+		Parsing (rosReceivedMessage4);
+//		ChangeRobotStateN (15);
 	}
-	
+
+	public void SendFaceDetectTrue() {
+//		Send (rosConnection);
+		Send (rosFaceDetectTrue);
+	}
+
+	public void SendFaceDetectFalse() {
+		Send (rosFaceDetectFalse);
+//		Behavior ("bow");
+	}
+
 	public void ChangeRobotStateN(byte state, byte substate = 1) {
 		ChangeRobotState (state, substate);
 		byte imageCommand = (byte)(state * 10 + substate);

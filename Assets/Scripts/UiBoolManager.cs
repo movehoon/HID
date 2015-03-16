@@ -25,10 +25,12 @@ public class UiBoolManager : MonoBehaviour {
 	}
 
 	public void ClickTrue () {
-		SetState (true);
+//		SetState (true);
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectTrue ();
 	}
 
 	public void ClickFalse () {
-		SetState (false);
+//		SetState (false);
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectFalse ();
 	}
 }

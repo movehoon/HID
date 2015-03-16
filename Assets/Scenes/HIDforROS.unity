@@ -869,7 +869,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 29644721}
+    mMethodName: ArrowRight
+    mParameters: []
+    oneShot: 0
 --- !u!65 &322003657
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3541,7 +3545,7 @@ GameObject:
   - 65: {fileID: 1422372049}
   - 114: {fileID: 1422372048}
   m_Layer: 8
-  m_Name: Sprite
+  m_Name: False
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4619,6 +4623,10 @@ Prefab:
     - target: {fileID: 166024, guid: 149df8c30340e4252b5956e44bfea764, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 175544, guid: 149df8c30340e4252b5956e44bfea764, type: 2}
+      propertyPath: m_Name
+      value: False
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 149df8c30340e4252b5956e44bfea764, type: 2}
