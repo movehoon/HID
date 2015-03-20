@@ -7,7 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: Assets/Scenes/HIDnew.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/HID4.unity
   - enabled: 0
     path: Assets/Scenes/WebCamServer.unity
+  - enabled: 1
+    path: Assets/Scenes/HID5.unity
