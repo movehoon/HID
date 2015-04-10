@@ -20,15 +20,15 @@ public class ProgramForRos : MonoBehaviour {
 	int port = 9090;
 	bool mRun = false;
 
-	public UiManager uiManager;
 	public Transform uiBoolPrefab;
 	public Transform uiBool = null;
 
-	string rosSubscribe_RequestHidInput = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
-	string rosReceivedMessage3 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": true}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
-	string rosReceivedMessage4 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": false}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+	string rosConnection = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
+	string rosCallService = @"{""op"":""call_service"", ""service"":""memory_monitor/write_to_memory"",""args"":""memory_monitor/RequestHIDInput""}";
+	string rosReceivedMessage3 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detector/face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": true}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+	string rosReceivedMessage4 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detector/face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": false}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
-	string rosFaceDetectTrue  = @"{""op"":""call_service"", ""service"":""/memory_monitor/write_to_memory"", ""args"":{""data"": ""{'event_name': 'face_detector/face_detected', 'detected': 'true'}"", ""by"": ""HID""}}";
+	string rosFaceDetectTrue = @"{""op"":""call_service"", ""service"":""/memory_monitor/write_to_memory"", ""args"":{""data"": ""{'event_name': 'face_detector/face_detected', 'detected': 'true'}"", ""by"": ""HID""}}";
 	string rosFaceDetectFalse = @"{""op"":""call_service"", ""service"":""/memory_monitor/write_to_memory"", ""args"":{""data"": ""{'event_name': 'face_detector/face_detected', 'detected': 'false'}"", ""by"": ""HID""}}";
 
 	string receivedMessage = "";
@@ -112,7 +112,7 @@ public class ProgramForRos : MonoBehaviour {
 					UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
 					label.text = "Disconnect";
 				}
-				Send (rosSubscribe_RequestHidInput);
+				Send (rosConnection);
 #endif
 				mRun = true;
 				Thread thread = new Thread (new ThreadStart (Process_Thread));
@@ -180,14 +180,12 @@ public class ProgramForRos : MonoBehaviour {
 	
 	public void ArrowUp () {
 		// Send JSON
-		uiManager.SetFaceRec (true);
-//		if (uiBool == null)
-//			uiBool = Instantiate(uiBoolPrefab) as Transform;
+		if (uiBool == null)
+			uiBool = Instantiate(uiBoolPrefab) as Transform;
 	}
 	public void ArrowDown () {
-		uiManager.SetFaceRec (false);
-//		Destroy (uiBool.gameObject);
-//		uiBool = null;
+		Destroy (uiBool.gameObject);
+		uiBool = null;
 //		ChangeRobotStateN (13);
 	}
 	public void ArrowLeft () {
