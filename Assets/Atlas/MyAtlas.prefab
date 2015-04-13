@@ -41,9 +41,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 6dd01202fb3a04f1ea67a26cf2254dfb, type: 2}
   mSprites:
-  - name: Play1Hot
+  - name: 1428387784_Target
+    x: 993
+    y: 1000
+    width: 24
+    height: 24
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: 1428387915_circle_green
+    x: 928
+    y: 916
+    width: 43
+    height: 43
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 2
+    paddingRight: 3
+    paddingTop: 3
+    paddingBottom: 2
+  - name: 1428762812_android-64
+    x: 928
+    y: 960
+    width: 64
+    height: 64
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: EmotionBackground
     x: 0
-    y: 1
+    y: 224
+    width: 800
+    height: 800
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Play1Hot
+    x: 801
+    y: 897
     width: 126
     height: 127
     borderLeft: 0
@@ -55,8 +107,8 @@ MonoBehaviour:
     paddingTop: 1
     paddingBottom: 0
   - name: Play1Pressed
-    x: 127
-    y: 1
+    x: 801
+    y: 769
     width: 126
     height: 127
     borderLeft: 0
