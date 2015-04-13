@@ -3,8 +3,8 @@ using System.Collections;
 
 public class RobotConnectionChecker : MonoBehaviour {
 
-	public ProgramForRos program;
-//	public Program program;
+//	public ProgramForRos program;
+	public Program program;
 
 	void FixedUpdate () {
 		UISprite sprite = GetComponentInChildren <UISprite> ();
