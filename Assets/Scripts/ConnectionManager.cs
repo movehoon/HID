@@ -131,19 +131,19 @@ public class ConnectionManager : MonoBehaviour {
 
 	void SetRobotPositionX (int x)
 	{
-		if (x < 0 || x > 40)
+		if (x < 0 || x > 400)
 			return;
 		Vector3 pos = spriteRobot.transform.localPosition;
-		int coordinatedPos = (x - 20) * 20;
+		int coordinatedPos = (x - 200) * 2;
 		pos.x = coordinatedPos;
 		spriteRobot.transform.localPosition = pos;
 	}
 	void SetRobotPositionY (int y)
 	{
-		if (y < 0 || y > 40)
+		if (y < 0 || y > 400)
 			return;
 		Vector3 pos = spriteRobot.transform.localPosition;
-		int coordinatedPos = (20 - y) * 20;
+		int coordinatedPos = (200 - y) * 2;
 		pos.y = coordinatedPos;
 		spriteRobot.transform.localPosition = pos;
 	}

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class UcrManager : MonoBehaviour {
+public class UcrManager {
 
 	public struct UcrData{
 		public byte type;
