@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UiFaceRecManager : MonoBehaviour {
+public class UiFaceDetectedManager : MonoBehaviour {
 	public UILabel labelTrue;
 	public UILabel labelFalse;
 	

@@ -258,7 +258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &248095927
 Transform:
   m_ObjectHideFlags: 0
@@ -767,7 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c48afeb7d6854f869b4dbd34a389122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  program: {fileID: 29644721}
+  program: {fileID: 0}
 --- !u!1 &322003653
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,13 +947,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 134
+  mWidth: 130
   mHeight: 40
   mDepth: 15
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 3.3499999
+  aspectRatio: 3.25
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 0ee708c39dae44f6a961b43792d3009c, type: 2}
@@ -3099,8 +3099,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510c275776fa74fca9150c378ea7ef90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiFaceRec: {fileID: 466024, guid: dd06274be76d34728bbc0866a34f4a95, type: 2}
-  uiVoiceRec: {fileID: 439810, guid: 040b6936054784e7585b4ea0a0f785bd, type: 2}
+  uiFaceDetected: {fileID: 485010, guid: 84b4d55d4724149f59207f02948d7437, type: 2}
+  uiMotionDetected: {fileID: 485010, guid: 709b00de674294488a58ff0e2fa1c192, type: 2}
+  uiPersonDetected: {fileID: 485010, guid: a9da4f121daa443a09012c4cf8073937, type: 2}
+  uiGestureRecognized: {fileID: 439810, guid: d389f77286e424301ae5f22bc5cada00, type: 2}
+  uiPersonRecognized: {fileID: 439810, guid: db8fdf4c5a96e41dd9a7f9a42ff03232, type: 2}
+  uiFaceRecognized: {fileID: 439810, guid: 44f7c841f6483401b832c6e9f5c0dc33, type: 2}
+  uiFacialExpressionRecognized: {fileID: 439810, guid: 8bc8f1281047c4f3bb260a8868256527,
+    type: 2}
+  uiSpeechRecognized: {fileID: 439810, guid: 040b6936054784e7585b4ea0a0f785bd, type: 2}
+  uiProspectRecognized: {fileID: 485010, guid: 63be12738b02f4d33a80fc459e158b20, type: 2}
 --- !u!114 &1329790639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3361,7 +3369,7 @@ MonoBehaviour:
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
-  mClipRange: {x: 0, y: -7.25, z: 1025.01318, w: 750}
+  mClipRange: {x: 0, y: -7.25, z: 1004.0719, w: 750}
   mClipSoftness: {x: 4, y: 4}
   mDepth: 1
   mSortingOrder: 0
@@ -3553,8 +3561,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510c275776fa74fca9150c378ea7ef90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiFaceRec: {fileID: 0}
-  uiVoiceRec: {fileID: 0}
+  uiFaceDetected: {fileID: 0}
+  uiMotionDetected: {fileID: 0}
+  uiPersonDetected: {fileID: 0}
+  uiGestureRecognized: {fileID: 0}
+  uiPersonRecognized: {fileID: 0}
+  uiFaceRecognized: {fileID: 0}
+  uiFacialExpressionRecognized: {fileID: 0}
+  uiSpeechRecognized: {fileID: 0}
+  uiProspectRecognized: {fileID: 0}
 --- !u!1 &1594162745
 GameObject:
   m_ObjectHideFlags: 0

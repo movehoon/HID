@@ -9,8 +9,15 @@ public class UiManager : MonoBehaviour {
 		UI_VOICE_REC,
 	};
 
-	public Transform uiFaceRec;
-	public Transform uiVoiceRec;
+	public Transform uiFaceDetected;
+	public Transform uiMotionDetected;
+	public Transform uiPersonDetected;
+	public Transform uiGestureRecognized;
+	public Transform uiPersonRecognized;
+	public Transform uiFaceRecognized;
+	public Transform uiFacialExpressionRecognized;
+	public Transform uiSpeechRecognized;
+	public Transform uiProspectRecognized;
 
 	List<Transform> uiList = new List<Transform> ();
 	float ui_height;
@@ -62,7 +69,7 @@ public class UiManager : MonoBehaviour {
 		if (!HasUI (UI_TYPE.UI_FACE_REC)) 
 		{
 			// Instanciate face rec ui
-			Transform transform = Instantiate (uiFaceRec, new Vector3(0, ui_height, 0), Quaternion.identity) as Transform;
+			Transform transform = Instantiate (uiFaceDetected, new Vector3(0, ui_height, 0), Quaternion.identity) as Transform;
 			uiList.Add(transform);
 //			ui_height += uiFaceRec.localScale.y;
 		}

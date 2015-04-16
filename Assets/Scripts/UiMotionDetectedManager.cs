@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UiFaceRecManager : MonoBehaviour {
+public class UiMotionDetectedManager : MonoBehaviour {
 	public UILabel labelTrue;
 	public UILabel labelFalse;
 	
@@ -16,11 +16,10 @@ public class UiFaceRecManager : MonoBehaviour {
 	
 	public void ClickTrue () {
 		//		SetState (true);
-		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectTrue ();
+//		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectTrue ();
 	}
 	
 	public void ClickFalse () {
 		//		SetState (false);
-		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectFalse ();
-	}
-}
+//		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectFalse ();
+	}}
