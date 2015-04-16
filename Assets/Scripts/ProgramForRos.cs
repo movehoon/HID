@@ -15,22 +15,23 @@ public class ProgramForRos : MonoBehaviour {
 	public const string Key_IpAddr = "Key_IpAddr";
 	
 	public GameObject connectionDialog;
+	public GameObject panelMode;
 	public UIInput ipaddress;
 	public UIButton connectButton;
 	int port = 9090;
 	bool mRun = false;
 
 	public UiManager uiManager;
-//	public Transform uiBoolPrefab;
-//	public Transform uiBool = null;
 
 	string rosSubscribe_RequestHidInput = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
-	string rosReceivedMessage3 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": true}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
-	string rosReceivedMessage4 = @"{""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""face_detected\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": false}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1426508304, ""nsecs"": 791610002}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
-	string rosReceivedMessage5 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": \""[u'face_detected']\"", \""query\"": \""\\\""{\\\\\\\""face_detected.detected\\\\\\\"": true}\\\""\""}"", ""header"": {""stamp"": {""secs"": 1428657314, ""nsecs"": 548304080}, ""frame_id"": "" "", ""seq"": 69}}, ""op"": ""publish""}";
+	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}";
 
 	string rosFaceDetectTrue  = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': true}"", ""by"": ""hid""} }";
 	string rosFaceDetectFalse = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': false}"", ""by"": ""hid""} }";
+	string rosFaceDetectedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': ";
+	string rosFaceDetectedFooter = @"}"", ""by"": ""hid""} }";
+	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'speech_recognized', 'recognized_word': ['hi']}"", ""by"": ""hid""} }";
 	string receivedMessage = "";
 
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -39,11 +40,13 @@ public class ProgramForRos : MonoBehaviour {
 	
 	void Start () {
 		connectionDialog.SetActive (true);
+		panelMode.SetActive (true);
+		TweenPosition tp = panelMode.GetComponentInChildren<TweenPosition> ();
+		tp.PlayReverse ();
 		ipaddress.value = GetIpAddr ();
 	}
 
 	void Update () {
-//		UIFaceDetected (faceDetected);
 		if (receivedMessage.Length > 0) {
 			string parseText = receivedMessage;
 			receivedMessage = "";
@@ -65,16 +68,53 @@ public class ProgramForRos : MonoBehaviour {
 	void Parsing (string jsonString) {
 		try
 		{
-			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
+//			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
 			JsonData json = JsonMapper.ToObject (jsonString);
-			Debug.Log ("Json: " + jsonString);
+//			Debug.Log ("Json: " + jsonString);
 			string topic = json ["topic"].ToString ();
 			string msg = json ["msg"]["msg"].ToString ();
-			Debug.Log ("Json msg: " + msg);
+//			Debug.Log ("Json msg: " + msg);
+
+			// Manage UI using event_name(s)
+			string event_name = JsonMapper.ToObject(msg)["event_name"].ToString ();
+			event_name = jsonRefine(event_name);
+//			Debug.Log ("Json event_name: " + event_name);
+			JsonData events = JsonMapper.ToObject(msg)["event_name"];
+			for (int i = 0 ; i < events.Count ; i++) {
+				Debug.Log ("Got event: " + events[i]);
+				switch (events[i].ToString ())
+				{
+				case "face_detected":
+					break;
+				case "motion_detected":
+					break;
+				}
+			}
+
 			string query = JsonMapper.ToObject(msg)["query"].ToString ();
 			query = jsonRefine(query);
 			Debug.Log ("Json query: " + query);
-
+			JsonData queries = JsonMapper.ToObject(msg)["query"];
+			for (int i = 0 ; i < events.Count ; i++) {
+				switch (events[i].ToString ())
+				{
+				case "face_detected":
+				{
+					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
+					Debug.Log ("face_detected/detected: " + detected);
+					uiManager.SetFaceDetected ( detected.Contains("True")?true:false );
+					break;
+				}
+				case "motion_detected":
+				{
+					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
+					Debug.Log ("motion_detected/detected: " + detected);
+					uiManager.SetMotionDetected (detected.Contains("True")?true:false);
+					break;
+				}
+				}
+			}
+			uiManager.UpdateEnd ();
 //			bool detected = JsonMapper.ToObject(query)["detected"];
 //			faceDetected = (detected) ? true : false;
 //			Debug.Log ("Json Parse: " + topic + ", detected: " + detected.ToString ());
@@ -95,13 +135,6 @@ public class ProgramForRos : MonoBehaviour {
 			inString = inString.Substring (1, inString.Length-2);
 		return inString.Replace("\\\"", "\"");
 	}
-
-//	void UIFaceDetected (bool detected) {
-//		if (uiBool == null)
-//			return;
-//
-//		uiBool.GetComponentInChildren<UiBoolManager> ().SetState (detected);
-//	}
 	
 	public void Connect () {
 		try 
@@ -184,34 +217,27 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	
 	public void ArrowUp () {
-		// Send JSON
-		uiManager.SetFaceRec (true);
-//		if (uiBool == null)
-//			uiBool = Instantiate(uiBoolPrefab) as Transform;
+		uiManager.SetFaceDetected (true);
 	}
 	public void ArrowDown () {
-		uiManager.SetFaceRec (false);
-//		Destroy (uiBool.gameObject);
-//		uiBool = null;
-//		ChangeRobotStateN (13);
+		uiManager.SetFaceDetected (false);
 	}
 	public void ArrowLeft () {
-		Parsing (rosReceivedMessage5);
-//		ChangeRobotStateN (14);
+		Parsing (rosReceivedMessage1);
 	}
 	public void ArrowRight () {
-		Parsing (rosReceivedMessage4);
-//		ChangeRobotStateN (15);
+//		Parsing (rosReceivedMessage2);
+		uiManager.SetFaceDetected (true);
+		uiManager.SetMotionDetected (false);
+		uiManager.UpdateEnd ();
 	}
 
 	public void SendFaceDetectTrue() {
-//		Send (rosConnection);
-		Send (rosFaceDetectTrue);
+		Send (rosFaceDetectedHeader + "true" + rosFaceDetectedFooter);
 	}
 
 	public void SendFaceDetectFalse() {
-		Send (rosFaceDetectFalse);
-//		Behavior ("bow");
+		Send (rosFaceDetectedHeader + "false" + rosFaceDetectedFooter);
 	}
 
 	public void ChangeRobotStateN(byte state, byte substate = 1) {
