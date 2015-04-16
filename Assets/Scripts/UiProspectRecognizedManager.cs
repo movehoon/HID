@@ -14,13 +14,11 @@ public class UiProspectRecognizedManager : MonoBehaviour {
 		labelNegatives.color = state ? colorDeselected : colorSelected;
 	}
 	
-	public void ClickTrue () {
-		//		SetState (true);
-		//		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectTrue ();
+	public void ClickPositive () {
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendProspectRecognizedPositives ();
 	}
 	
-	public void ClickFalse () {
-		//		SetState (false);
-		//		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendFaceDetectFalse ();
+	public void ClickNegative () {
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendProspectRecognizedNegatives ();
 	}
 }

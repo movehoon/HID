@@ -31,6 +31,10 @@ public class ProgramForRos : MonoBehaviour {
 	string rosFaceDetectFalse = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': false}"", ""by"": ""hid""} }";
 	string rosFaceDetectedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': ";
 	string rosFaceDetectedFooter = @"}"", ""by"": ""hid""} }";
+
+	string rosProspectRecognizedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'prospect_recognized', 'prospect': ";
+	string rosProspectRecognizedFooter = @"}"", ""by"": ""hid""} }";
+
 	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'speech_recognized', 'recognized_word': ['hi']}"", ""by"": ""hid""} }";
 	string receivedMessage = "";
 
@@ -80,16 +84,23 @@ public class ProgramForRos : MonoBehaviour {
 			event_name = jsonRefine(event_name);
 //			Debug.Log ("Json event_name: " + event_name);
 			JsonData events = JsonMapper.ToObject(msg)["event_name"];
+			string [] uiNames = new string[events.Count];
 			for (int i = 0 ; i < events.Count ; i++) {
 				Debug.Log ("Got event: " + events[i]);
 				switch (events[i].ToString ())
 				{
 				case "face_detected":
+					uiNames[i] = "FaceDetected";
 					break;
 				case "motion_detected":
+					uiNames[i] = "MotionDetected";
+					break;
+				case "prospective_detected":
+					uiNames[i] = "ProspectiveDetected";
 					break;
 				}
 			}
+			uiManager.RemoveUnusingUI(uiNames);
 
 			string query = JsonMapper.ToObject(msg)["query"].ToString ();
 			query = jsonRefine(query);
@@ -110,6 +121,13 @@ public class ProgramForRos : MonoBehaviour {
 					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
 					Debug.Log ("motion_detected/detected: " + detected);
 					uiManager.SetMotionDetected (detected.Contains("True")?true:false);
+					break;
+				}
+				case "prospect_recognized":
+				{
+					string prospect = JsonMapper.ToObject(queries[i].ToString ())["prospect"].ToString ();
+					Debug.Log ("prospective_detected/prospect: " + prospect);
+					uiManager.SetProspectRecognized (prospect.Contains("Positives")?true:false);
 					break;
 				}
 				}
@@ -235,9 +253,14 @@ public class ProgramForRos : MonoBehaviour {
 	public void SendFaceDetectTrue() {
 		Send (rosFaceDetectedHeader + "true" + rosFaceDetectedFooter);
 	}
-
 	public void SendFaceDetectFalse() {
 		Send (rosFaceDetectedHeader + "false" + rosFaceDetectedFooter);
+	}
+	public void SendProspectRecognizedPositives() {
+		Send (rosProspectRecognizedHeader + "positives" + rosProspectRecognizedFooter);
+	}	
+	public void SendProspectRecognizedNegatives() {
+		Send (rosProspectRecognizedHeader + "negatives" + rosProspectRecognizedFooter);
 	}
 
 	public void ChangeRobotStateN(byte state, byte substate = 1) {

@@ -70,6 +70,34 @@ public class UiManager : MonoBehaviour {
 		UiMotionDetectedManager ui = GetUI(UI_TYPE.UI_MOTION_DETECTED).gameObject.GetComponentInChildren<UiMotionDetectedManager> ();
 		ui.SetState (detected);
 	}
+	
+	public void SetProspectRecognized(bool prospect)
+	{
+		if (!HasUI ("ProspectRecognized")) 
+		{
+			Transform transform = Instantiate (uiProspectRecognized, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
+			uiList.Add(transform);
+		}
+		UiProspectRecognizedManager ui = GetUI(UI_TYPE.UI_PROSPECT_RECOGNIZED).gameObject.GetComponentInChildren<UiProspectRecognizedManager> ();
+		ui.SetState (prospect);
+	}
+	
+	public void RemoveUnusingUI (string [] uiNames)
+	{
+		// remove ui
+		foreach (Transform transform in uiList) {
+			bool detected = false;
+			foreach (string name in uiNames) {
+				if (transform.name.Contains (name))
+					detected = true;
+			}
+			if (!detected)
+			{
+				uiList.Remove(transform);
+				Destroy(transform.gameObject);
+			}
+		}
+	}
 
 	bool HasUI(string uiName)
 	{
@@ -211,7 +239,8 @@ public class UiManager : MonoBehaviour {
 				if (transform.name.Contains ("ProspectRecognized"))
 					return transform;
 				break;
-			}		}
+			}		
+		}
 		return null;
 	}
 
