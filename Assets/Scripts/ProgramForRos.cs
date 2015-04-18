@@ -27,6 +27,7 @@ public class ProgramForRos : MonoBehaviour {
 	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}";
 	string rosReceivedMessage3 = @" {""topic"": ""/memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""prospect_recognized\""], \""query\"": [\""{\\\""detected\\\"":true}\"", \""{\\\""prospect\\\"":\\\""positive\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429246568, ""nsecs"": 713021039}, ""frame_id"": "" "", ""seq"": 1}}, ""op"": ""publish""}";
+	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
 	string rosFaceDetectTrue  = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': true}"", ""by"": ""hid""} }";
 	string rosFaceDetectFalse = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': false}"", ""by"": ""hid""} }";
@@ -35,6 +36,9 @@ public class ProgramForRos : MonoBehaviour {
 
 	string rosProspectRecognizedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'prospect_recognized', 'prospect': ";
 	string rosProspectRecognizedFooter = @"}"", ""by"": ""hid""} }";
+	
+	string rosSpeechRecognizedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{""event_name"":""speech_recognized"", ""recognized_word"": [""";
+	string rosSpeechRecognizedFooter = @"""], ""confidence"": [""1.0""]}"", ""by"": ""hid""} }";
 
 	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'speech_recognized', 'recognized_word': ['hi']}"", ""by"": ""hid""} }";
 	string receivedMessage = "";
@@ -85,7 +89,7 @@ public class ProgramForRos : MonoBehaviour {
 			event_name = jsonRefine(event_name);
 //			Debug.Log ("Json event_name: " + event_name);
 			JsonData events = JsonMapper.ToObject(msg)["event_name"];
-			string [] uiNames = new string[events.Count];
+			string [] uiNames = new string[events.Count+1];
 			for (int i = 0 ; i < events.Count ; i++) {
 				Debug.Log ("Got event: " + events[i]);
 				switch (events[i].ToString ())
@@ -99,8 +103,12 @@ public class ProgramForRos : MonoBehaviour {
 				case "prospect_recognized":
 					uiNames[i] = "ProspectiveDetected";
 					break;
+				case "speech_recognized":
+					uiNames[i] = "SpeechRecognized";
+					break;
 				}
 			}
+			uiNames[events.Count] = "SpeechRecognized";
 			uiManager.RemoveUnusingUI(uiNames);
 
 			string query = JsonMapper.ToObject(msg)["query"].ToString ();
@@ -131,8 +139,16 @@ public class ProgramForRos : MonoBehaviour {
 					uiManager.SetProspectRecognized (prospect.Contains("Positives")?true:false);
 					break;
 				}
+				case "speech_recognized":
+//					string[] speeches = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+//					Debug.Log ("prospective_detected/prospect: " + speeches);
+//					uiManager.SetProspectRecognized (prospect.Contains("Positives")?true:false);
+					break;
 				}
 			}
+			uiManager.SetSpeechRecognized (0, "13", 0.8f);
+			uiManager.SetSpeechRecognized (1, "14", 0.75f);
+			uiManager.SetSpeechRecognized (2, "15", 0.6f);
 			uiManager.UpdateEnd ();
 //			bool detected = JsonMapper.ToObject(query)["detected"];
 //			faceDetected = (detected) ? true : false;
@@ -242,7 +258,7 @@ public class ProgramForRos : MonoBehaviour {
 		uiManager.SetFaceDetected (false);
 	}
 	public void ArrowLeft () {
-		Parsing (rosReceivedMessage1);
+		Parsing (rosReceivedMessage4);
 	}
 	public void ArrowRight () {
 		Parsing (rosReceivedMessage3);
@@ -262,6 +278,9 @@ public class ProgramForRos : MonoBehaviour {
 	}	
 	public void SendProspectRecognizedNegatives() {
 		Send (rosProspectRecognizedHeader + "negatives" + rosProspectRecognizedFooter);
+	}
+	public void SendSpeechRecognized (string speech) {
+		Send (rosSpeechRecognizedHeader + speech + rosSpeechRecognizedFooter);
 	}
 
 	public void ChangeRobotStateN(byte state, byte substate = 1) {

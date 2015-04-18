@@ -31,14 +31,15 @@ public class UiManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		float uiHeight = 0;
+		float baseHeight = 0;
 		foreach (Transform transform in uiList) {
-			if (transform.localPosition.y != uiHeight)
+			baseHeight -= GetUIHeight (GetUIType (transform.name))/2;
+			if (transform.localPosition.y != baseHeight)
 			{
-				transform.localPosition = new Vector3(0, uiHeight, 0);
+				transform.localPosition = new Vector3(0, baseHeight, 0);
 			}
-			Debug.Log ("Set ui height: " + uiHeight.ToString ());
-			uiHeight -= GetUIHeight(GetUIType(transform.name));
+			Debug.Log ("Set ui height: " + baseHeight.ToString ());
+			baseHeight -= GetUIHeight(GetUIType(transform.name))/2;
 		}
 	}
 
@@ -82,6 +83,17 @@ public class UiManager : MonoBehaviour {
 		ui.SetState (prospect);
 	}
 	
+	public void SetSpeechRecognized(int n, string speech, float confidence)
+	{
+		if (!HasUI ("SpeechRecognized")) 
+		{
+			Transform transform = Instantiate (uiSpeechRecognized, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
+			uiList.Add(transform);
+		}
+		UiSpeechRecognizedManager ui = GetUI(UI_TYPE.UI_SPEECH_RECOGNIZED).gameObject.GetComponentInChildren<UiSpeechRecognizedManager> ();
+		ui.SetSpeechWithConfidence (n, speech, confidence);
+	}
+
 	public void RemoveUnusingUI (string [] uiNames)
 	{
 		// remove ui

@@ -60,7 +60,7 @@ GameObject:
   - 65: {fileID: 6539784}
   - 114: {fileID: 11439784}
   m_Layer: 8
-  m_Name: RecText
+  m_Name: Speech3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ GameObject:
   - 65: {fileID: 6539786}
   - 114: {fileID: 11439802}
   m_Layer: 8
-  m_Name: RecText
+  m_Name: Speech1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,7 +192,7 @@ GameObject:
   - 65: {fileID: 6539788}
   - 114: {fileID: 11439804}
   m_Layer: 8
-  m_Name: RecText
+  m_Name: Speech2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 439810}
   - 114: {fileID: 11439816}
+  - 114: {fileID: 11442236}
   m_Layer: 8
   m_Name: UI_SpeechRecognized
   m_TagString: Untagged
@@ -399,7 +400,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139810}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.08394623, y: -39.595108, z: 0}
+  m_LocalPosition: {x: -2.08394623, y: -87.5259857, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 439808}
@@ -471,7 +472,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 11442236}
+    mMethodName: ClickSpeech3
+    mParameters: []
+    oneShot: 0
 --- !u!114 &11439786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -956,7 +961,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 11442236}
+    mMethodName: ClickSpeech1
+    mParameters: []
+    oneShot: 0
 --- !u!114 &11439804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -981,7 +990,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 11442236}
+    mMethodName: ClickSpeech2
+    mParameters: []
+    oneShot: 0
 --- !u!114 &11439806
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1242,13 +1255,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 136
+  mWidth: 134
   mHeight: 80
   mDepth: 24
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.70000005
+  aspectRatio: 1.67499995
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 0ee708c39dae44f6a961b43792d3009c, type: 2}
@@ -1329,6 +1342,25 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: f95e07e3d350bf748b0c42b453a69d2e, type: 2}
   mSpriteName: Beveled Outline
   mFillCenter: 1
+--- !u!114 &11442236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 139810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3cff4f8b7364416883fb4b2b335cea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  labelSpeech:
+  - {fileID: 11439800}
+  - {fileID: 11439806}
+  - {fileID: 11439786}
+  labelConfidence:
+  - {fileID: 11439798}
+  - {fileID: 11439808}
+  - {fileID: 11439788}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
