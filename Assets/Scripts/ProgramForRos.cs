@@ -26,6 +26,7 @@ public class ProgramForRos : MonoBehaviour {
 	string rosSubscribe_RequestHidInput = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
 	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}";
+	string rosReceivedMessage3 = @" {""topic"": ""/memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""prospect_recognized\""], \""query\"": [\""{\\\""detected\\\"":true}\"", \""{\\\""prospect\\\"":\\\""positive\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429246568, ""nsecs"": 713021039}, ""frame_id"": "" "", ""seq"": 1}}, ""op"": ""publish""}";
 
 	string rosFaceDetectTrue  = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': true}"", ""by"": ""hid""} }";
 	string rosFaceDetectFalse = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'face_detected', 'detected': false}"", ""by"": ""hid""} }";
@@ -95,7 +96,7 @@ public class ProgramForRos : MonoBehaviour {
 				case "motion_detected":
 					uiNames[i] = "MotionDetected";
 					break;
-				case "prospective_detected":
+				case "prospect_recognized":
 					uiNames[i] = "ProspectiveDetected";
 					break;
 				}
@@ -244,10 +245,10 @@ public class ProgramForRos : MonoBehaviour {
 		Parsing (rosReceivedMessage1);
 	}
 	public void ArrowRight () {
-//		Parsing (rosReceivedMessage2);
-		uiManager.SetFaceDetected (true);
-		uiManager.SetMotionDetected (false);
-		uiManager.UpdateEnd ();
+		Parsing (rosReceivedMessage3);
+//		uiManager.SetFaceDetected (true);
+//		uiManager.SetMotionDetected (false);
+//		uiManager.UpdateEnd ();
 	}
 
 	public void SendFaceDetectTrue() {
@@ -287,11 +288,11 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	
 	void Send (string jsonString) {
+		Debug.Log ("Send" + jsonString);
 		try {
 //			if (socket.Connected)
 //			{
 			socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
-			Debug.Log (jsonString);
 //			}
 //			else
 //			{
