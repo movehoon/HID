@@ -16,6 +16,7 @@ public class ProgramForRos : MonoBehaviour {
 	
 	public GameObject connectionDialog;
 	public GameObject panelMode;
+	public GameObject panelEmotion;
 	public UIInput ipaddress;
 	public UIButton connectButton;
 	int port = 9090;
@@ -52,6 +53,9 @@ public class ProgramForRos : MonoBehaviour {
 		panelMode.SetActive (true);
 		TweenPosition tp = panelMode.GetComponentInChildren<TweenPosition> ();
 		tp.PlayReverse ();
+		panelEmotion.SetActive (true);
+		TweenPosition tpEmotion = panelEmotion.GetComponentInChildren<TweenPosition> ();
+		tpEmotion.PlayReverse ();
 		ipaddress.value = GetIpAddr ();
 	}
 

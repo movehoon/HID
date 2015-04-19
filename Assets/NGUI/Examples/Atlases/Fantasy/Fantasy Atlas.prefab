@@ -48,8 +48,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mSprites:
   - name: 1428762812_android-64
-    x: 355
-    y: 831
+    x: 930
+    y: 1984
     width: 64
     height: 64
     borderLeft: 0
@@ -61,8 +61,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Beveled Outline
-    x: 355
-    y: 813
+    x: 995
+    y: 2031
     width: 17
     height: 17
     borderLeft: 5
@@ -74,8 +74,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Bright
-    x: 355
-    y: 795
+    x: 995
+    y: 2013
     width: 17
     height: 17
     borderLeft: 5
@@ -87,8 +87,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Dark
-    x: 355
-    y: 777
+    x: 995
+    y: 1995
     width: 17
     height: 17
     borderLeft: 5
@@ -99,9 +99,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: Fantasy Font
+  - name: EmotionBackground
     x: 0
-    y: 554
+    y: 1248
+    width: 800
+    height: 800
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Fantasy Font
+    x: 258
+    y: 1035
     width: 256
     height: 212
     borderLeft: 0
@@ -113,8 +126,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 44
   - name: Flat Outline
-    x: 373
-    y: 813
+    x: 930
+    y: 1966
     width: 17
     height: 17
     borderLeft: 5
@@ -126,8 +139,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Glow
-    x: 373
-    y: 797
+    x: 930
+    y: 1932
     width: 17
     height: 15
     borderLeft: 4
@@ -140,7 +153,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: NGUI
     x: 0
-    y: 477
+    y: 913
     width: 255
     height: 76
     borderLeft: 0
@@ -152,8 +165,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Orc Armor - Boots
-    x: 258
-    y: 767
+    x: 801
+    y: 1677
     width: 96
     height: 128
     borderLeft: 0
@@ -165,8 +178,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Orc Armor - Bracers
-    x: 387
-    y: 911
+    x: 801
+    y: 1806
     width: 123
     height: 113
     borderLeft: 0
@@ -178,8 +191,8 @@ MonoBehaviour:
     paddingTop: 7
     paddingBottom: 8
   - name: Orc Armor - Shoulders
-    x: 258
-    y: 896
+    x: 801
+    y: 1920
     width: 128
     height: 128
     borderLeft: 0
@@ -192,7 +205,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: Paper Background
     x: 0
-    y: 767
+    y: 990
     width: 257
     height: 257
     borderLeft: 1
@@ -204,8 +217,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Smooth
-    x: 391
-    y: 813
+    x: 930
+    y: 1948
     width: 17
     height: 17
     borderLeft: 4
@@ -217,8 +230,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Window
-    x: 257
-    y: 597
+    x: 515
+    y: 1078
     width: 254
     height: 169
     borderLeft: 8

@@ -15,6 +15,7 @@ public class UiManager : MonoBehaviour {
 		UI_FACIAL_EXPRESSION_RECOGNIZED,
 		UI_SPEECH_RECOGNIZED,
 		UI_PROSPECT_RECOGNIZED,
+		UI_ANSWER,
 	};
 
 	public Transform uiFaceDetected;
@@ -26,7 +27,10 @@ public class UiManager : MonoBehaviour {
 	public Transform uiFacialExpressionRecognized;
 	public Transform uiSpeechRecognized;
 	public Transform uiProspectRecognized;
+	public Transform uiAnswer;
 
+	public Transform uiPanel;
+	public Transform uiPopupEmotionManager;
 	List<Transform> uiList = new List<Transform> ();
 
 	// Update is called once per frame
