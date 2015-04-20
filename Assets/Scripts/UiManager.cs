@@ -30,32 +30,40 @@ public class UiManager : MonoBehaviour {
 	public Transform uiAnswer;
 
 	public Transform uiPanel;
+	public UIPopupModeManager uiPopupMode;
 	public Transform uiPopupEmotionManager;
 	List<Transform> uiList = new List<Transform> ();
 
 	// Update is called once per frame
 	void Update () {
 		float baseHeight = 0;
-		foreach (Transform transform in uiList) {
-			baseHeight -= GetUIHeight (GetUIType (transform.name))/2;
-			if (transform.localPosition.y != baseHeight)
-			{
-				transform.localPosition = new Vector3(0, baseHeight, 0);
+		try {
+		if (uiList.Count > 0) {
+			foreach (Transform transform in uiList) {
+				baseHeight -= GetUIHeight (GetUIType (transform.name)) / 2;
+				if (transform.localPosition.y != baseHeight)
+					transform.localPosition = new Vector3 (0, baseHeight, 0);
+				//			Debug.Log ("Set ui height: " + baseHeight.ToString ());
+				baseHeight -= GetUIHeight (GetUIType (transform.name)) / 2;
 			}
-			Debug.Log ("Set ui height: " + baseHeight.ToString ());
-			baseHeight -= GetUIHeight(GetUIType(transform.name))/2;
+		}
+		}
+		catch (System.Exception e) {
+			Debug.Log (e.ToString ());
 		}
 	}
 
-	public void UpdateStart () {
-
-	}
-
-	public void UpdateEnd () {
+	public void RemoveDynamicUI ()
+	{
+		foreach (Transform transform in uiList)
+			Destroy (transform.gameObject);
+		uiList.Clear ();
 	}
 
 	public void SetFaceDetected(bool detected)
 	{
+		if (uiPopupMode.currentMode == 0)
+			return;
 		if (!HasUI ("FaceDetected")) 
 		{
 			Transform transform = Instantiate (uiFaceDetected, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
@@ -67,6 +75,8 @@ public class UiManager : MonoBehaviour {
 
 	public void SetMotionDetected(bool detected)
 	{
+		if (uiPopupMode.currentMode == 0)
+			return;
 		if (!HasUI ("MotionDetected")) 
 		{
 			Transform transform = Instantiate (uiMotionDetected, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
@@ -78,6 +88,8 @@ public class UiManager : MonoBehaviour {
 	
 	public void SetProspectRecognized(bool prospect)
 	{
+		if (uiPopupMode.currentMode == 0)
+			return;
 		if (!HasUI ("ProspectRecognized")) 
 		{
 			Transform transform = Instantiate (uiProspectRecognized, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
@@ -89,6 +101,8 @@ public class UiManager : MonoBehaviour {
 	
 	public void SetSpeechRecognized(int n, string speech, float confidence)
 	{
+		if (uiPopupMode.currentMode == 0)
+			return;
 		if (!HasUI ("SpeechRecognized")) 
 		{
 			Transform transform = Instantiate (uiSpeechRecognized, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
@@ -98,21 +112,42 @@ public class UiManager : MonoBehaviour {
 		ui.SetSpeechWithConfidence (n, speech, confidence);
 	}
 
+	public void SetAnswerText (string answer)
+	{
+		if (uiPopupMode.currentMode == 0)
+			return;
+		if (!HasUI ("Answer")) {
+			Transform transform = Instantiate (uiAnswer, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
+			uiList.Add(transform);
+		}
+		UiAnswer ui = GetUI(UI_TYPE.UI_ANSWER).gameObject.GetComponentInChildren<UiAnswer> ();
+		ui.SetText (answer);
+	}
+
 	public void RemoveUnusingUI (string [] uiNames)
 	{
 		// remove ui
-		foreach (Transform transform in uiList) {
-			bool detected = false;
-			foreach (string name in uiNames) {
-				if (transform.name.Contains (name))
-					detected = true;
+		try {
+			foreach (Transform transform in uiList) {
+				Destroy (transform.gameObject);
 			}
-			if (!detected)
-			{
-				uiList.Remove(transform);
-				Destroy(transform.gameObject);
-			}
+			uiList.RemoveRange (0, uiList.Count);
 		}
+		catch (System.Exception e) {
+			Debug.Log (e.ToString ());
+		}
+//		foreach (Transform transform in uiList) {
+//			bool detected = false;
+//			foreach (string name in uiNames) {
+//				if (transform.name.Contains (name))
+//					detected = true;
+//			}
+//			if (!detected)
+//			{
+//				uiList.Remove(transform);
+//				Destroy(transform.gameObject);
+//			}
+//		}
 	}
 
 	bool HasUI(string uiName)
@@ -166,6 +201,10 @@ public class UiManager : MonoBehaviour {
 				if (transform.name.Contains ("ProspectRecognized"))
 					return true;
 				break;
+			case UI_TYPE.UI_ANSWER:
+				if (transform.name.Contains ("Answer"))
+					return true;
+				break;
 			}
 		}
 		return false;
@@ -179,6 +218,7 @@ public class UiManager : MonoBehaviour {
 		case UI_TYPE.UI_MOTION_DETECTED:
 		case UI_TYPE.UI_PERSON_DETECTED:
 		case UI_TYPE.UI_PROSPECT_RECOGNIZED:
+		case UI_TYPE.UI_ANSWER:
 			return 100;
 		case UI_TYPE.UI_GESTURE_RECOGNIZED:
 		case UI_TYPE.UI_PERSON_RECOGNIZED:
@@ -210,6 +250,8 @@ public class UiManager : MonoBehaviour {
 			return UI_TYPE.UI_SPEECH_RECOGNIZED;
 		if (uiName.Contains ("ProspectRecognized"))
 			return UI_TYPE.UI_PROSPECT_RECOGNIZED;
+		if (uiName.Contains ("Answer"))
+			return UI_TYPE.UI_ANSWER;
 		return UI_TYPE.UI_NOT_DEFINED;
 	}
 
@@ -253,6 +295,10 @@ public class UiManager : MonoBehaviour {
 				break;
 			case UI_TYPE.UI_PROSPECT_RECOGNIZED:
 				if (transform.name.Contains ("ProspectRecognized"))
+					return transform;
+				break;
+			case UI_TYPE.UI_ANSWER:
+				if (transform.name.Contains ("Answer"))
 					return transform;
 				break;
 			}		

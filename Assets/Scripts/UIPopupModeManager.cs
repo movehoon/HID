@@ -6,12 +6,15 @@ public class UIPopupModeManager : MonoBehaviour {
 	public UILabel[] labelModes;
 	public int currentMode = 0;
 
+	public Transform[] showLv0;
+	public UiManager uiManager;
+
 	Color colorSelected = new Color(255/255f, 23/255f, 59/255f);
 	Color colorDeselected = new Color(0/255f, 0/255f, 0/255f);
 
 	void Start ()
 	{
-		SetMode (0);
+		SetMode (1);
 	}
 
 	public void SetMode(int mode)
@@ -22,6 +25,15 @@ public class UIPopupModeManager : MonoBehaviour {
 				labelModes[i].color = colorSelected;
 			else
 				labelModes[i].color = colorDeselected;
+		}
+
+		if (mode == 0) {
+			uiManager.RemoveDynamicUI ();
+			foreach (Transform transform in showLv0)
+				transform.gameObject.SetActive (true);
+		} else {
+			foreach (Transform transform in showLv0)
+				transform.gameObject.SetActive (false);
 		}
 	}
 
