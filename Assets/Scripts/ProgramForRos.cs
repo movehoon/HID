@@ -151,7 +151,7 @@ public class ProgramForRos : MonoBehaviour {
 					uiManager.SetAnswerText (answer);
 					}
 					catch (Exception e) {
-						uiManager.SetAnswerText ("50");
+						uiManager.SetAnswerText ("");
 					}
 					break;
 				}
