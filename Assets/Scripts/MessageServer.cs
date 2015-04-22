@@ -1,0 +1,101 @@
+﻿using UnityEngine;
+using System;
+using System.Collections;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+public class MessageServer : MonoBehaviour {
+
+	public TcpListener server = null;
+	Thread threadListen;
+	bool mRunning;
+
+	NetworkStream stream;
+
+	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
+	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}/r/f";
+	string rosReceivedMessage3 = @" {""topic"": ""/memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""prospect_recognized\""], \""query\"": [\""{\\\""detected\\\"":true}\"", \""{\\\""prospect\\\"":\\\""positive\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429246568, ""nsecs"": 713021039}, ""frame_id"": "" "", ""seq"": 1}}, ""op"": ""publish""}/r/f";
+	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
+	string rosReceivedMessage5 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":\\\""\\uc548\\ub155\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
+
+	int count = 0;
+	public void ClickSend () {
+		if (server == null)
+			return;
+		count++;
+		if (count > 2)
+			count = 0;
+		switch (count) {
+		case 0:
+			Send (rosReceivedMessage2);
+			break;
+		case 1:
+			TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+			Send (textAsset.text);
+			break;
+		case 2:
+			Send (rosReceivedMessage4);
+			break;
+		}
+	}
+
+	void Send (string message) {
+		if (stream == null)
+			return;
+		stream.Write (GetBytes (message), 0, GetBytes (message).Length);
+		Debug.Log ("Send: " + message);
+	}
+	static byte[] GetBytes(string str)
+	{
+		byte[] bytes = new byte[str.Length * sizeof(char)];
+		System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+		return bytes;
+	}
+
+	void Awake () {
+		threadListen = new Thread(new ThreadStart(TcpListener_Co));
+		threadListen.Start();
+	}
+
+	void TcpListener_Co () {
+		mRunning = true;
+		try {
+			server = new TcpListener (IPAddress.Any, 9090);
+			server.Start ();
+		}
+		catch (Exception ex) {
+			Debug.Log (ex.ToString ());
+		}
+		while (mRunning) 
+		{
+			Debug.Log ("[server] Waiting for a connection... ");
+			if (!server.Pending ())
+			{
+				Thread.Sleep (100);
+			}
+			else
+			{
+				TcpClient client = server.AcceptTcpClient ();
+				Debug.Log ("[Server] Connected");
+				stream = client.GetStream ();
+				stream.ReadTimeout = 10;
+				stream.WriteTimeout = 10;
+				stream.Flush ();
+//				byte[] inByte = new byte[1024];
+				while (client.Connected) {
+//					try {
+//						int nRead = stream.Read (inByte, 0, 1024);
+//						Debug.Log ("[server] get: " + inByte[0].ToString () + ", " + nRead.ToString () + " bytes");
+//					} catch (Exception ex) {
+//						Debug.Log (ex.ToString ());
+//						continue;
+//					}
+				}
+				client.Close ();
+				Debug.Log ("[server] client disconnected");
+			}
+			Thread.Sleep (10);
+		}
+	}
+}

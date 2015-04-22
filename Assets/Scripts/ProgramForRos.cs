@@ -82,17 +82,17 @@ public class ProgramForRos : MonoBehaviour {
 	void Parsing (string jsonString) {
 		try
 		{
-//			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
+			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
 			JsonData json = JsonMapper.ToObject (jsonString);
-//			Debug.Log ("Json: " + jsonString);
+			Debug.Log ("Json: " + jsonString);
 			string topic = json ["topic"].ToString ();
 			string msg = json ["msg"]["msg"].ToString ();
-//			Debug.Log ("Json msg: " + msg);
+			Debug.Log ("Json msg: " + msg);
 
 			// Manage UI using event_name(s)
 			string event_name = JsonMapper.ToObject(msg)["event_name"].ToString ();
 			event_name = jsonRefine(event_name);
-//			Debug.Log ("Json event_name: " + event_name);
+			Debug.Log ("Json event_name: " + event_name);
 			JsonData events = JsonMapper.ToObject(msg)["event_name"];
 			string [] uiNames = new string[events.Count];
 			for (int i = 0 ; i < events.Count ; i++) {
@@ -270,7 +270,8 @@ public class ProgramForRos : MonoBehaviour {
 		uiManager.SetFaceDetected (false);
 	}
 	public void ArrowLeft () {
-		Parsing (rosReceivedMessage5);
+		TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+		Parsing (textAsset.text);
 	}
 	public void ArrowRight () {
 		Parsing (rosReceivedMessage3);

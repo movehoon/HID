@@ -1,0 +1,1 @@
+{"topic": "memory_monitor/request_hid_input","msg": {"msg": "{\"event_name\": [\"face_detected\"], \"query\": [\"{\\\"detected\\\":true}\"]}","header": {"stamp":{"secs": 1429181797,"nsecs": 859826087},"frame_id": "","seq": 2}}}
