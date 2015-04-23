@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
 public class MessageServer : MonoBehaviour {
@@ -116,7 +117,9 @@ public class MessageServer : MonoBehaviour {
 	void Send (string message) {
 		if (stream == null)
 			return;
-		stream.Write (GetBytes (message), 0, GetBytes (message).Length);
+		byte [] bytes = Encoding.Unicode.GetBytes (message);
+		stream.Write (bytes, 0, bytes.Length);
+//		stream.Write (GetBytes (message), 0, GetBytes (message).Length);
 		Debug.Log ("Send: " + message);
 	}
 	static byte[] GetBytes(string str)
