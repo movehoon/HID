@@ -14,7 +14,7 @@ public class IpAddressLabel : MonoBehaviour {
 			foreach (IPAddress ip in addr) 
 			{
 				if (ip.ToString ().StartsWith("192"))
-					label.text = "IP Address: " + addr[addr.Length-1].ToString ();
+					label.text = "IP Address: " + ip.ToString ();
 			}
 		}
 	}
