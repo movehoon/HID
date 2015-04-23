@@ -15,7 +15,7 @@ public class UiSpeechRecognizedManager : MonoBehaviour {
 	}
 
 	void Start () {
-		Invoke ("KillMe", 10);
+//		Invoke ("KillMe", 10);
 	}
 
 	void KillMe () {

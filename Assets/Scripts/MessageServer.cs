@@ -24,7 +24,7 @@ public class MessageServer : MonoBehaviour {
 	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
 	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}/r/f";
 	string rosReceivedMessage3 = @" {""topic"": ""/memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""prospect_recognized\""], \""query\"": [\""{\\\""detected\\\"":true}\"", \""{\\\""prospect\\\"":\\\""positive\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429246568, ""nsecs"": 713021039}, ""frame_id"": "" "", ""seq"": 1}}, ""op"": ""publish""}/r/f";
-	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
+//	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
 	string rosReceivedMessage5 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":\\\""\\uc548\\ub155\\\""}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
 	int count = 0;
@@ -53,7 +53,7 @@ public class MessageServer : MonoBehaviour {
 	const string eventNameFaceDetected = @"\""face_detected\""";
 	const string eventNameProspectRecognized = @"\""prospect_recognized\""";
 	const string eventNameSpeechRecognized = @"\""speech_recognized\""";
-	const string eventNameSpeechRecognizedRequest = @"\""speech_recognized_request\""";
+	const string eventNameCheckSpeechRecognized = @"\""check_speech_recognized\""";
 
 	const string eventNameEmotionSpace = @"\""emotion_space\""";
 
@@ -67,6 +67,12 @@ public class MessageServer : MonoBehaviour {
 	const string querySpeechRecognizedAnswerFooter  = @"\\\""}\""";
 
 	const string querySpeechRecognized  = @"\""{\\\""detected\\\"":true}\""";
+
+	const string queryCheckSpeechRecognizedHeader  = @"\""{\\\""confidence\\\"": ";
+	const string queryCheckSpeechRecognizedMiddle  = @", \\\""recognized_word\\\"": \\\""";
+	const string queryCheckSpeechRecognizedFooter  = @"\\\""}\""";
+
+	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""check_speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
 	public void SendStateMessage () {
 		string eventName = "";
@@ -97,10 +103,12 @@ public class MessageServer : MonoBehaviour {
 			UiAnswer answer = messages[2].GetComponentInChildren<UiAnswer> ();
 			query += querySpeechRecognizedAnswerHeader + answer.GetText () + querySpeechRecognizedAnswerFooter + ", ";
 		}
-		
+
 		UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
 		if (toggleSpeech.value) {
-			eventName += eventNameSpeechRecognizedRequest + ", ";
+			eventName += eventNameCheckSpeechRecognized + ", ";
+			UiSpeechRecognizedManager speech = messages[3].GetComponentInChildren<UiSpeechRecognizedManager> ();
+			query += queryCheckSpeechRecognizedHeader + speech.labelConfidence[0].text + queryCheckSpeechRecognizedMiddle + speech.labelSpeech[0].text + queryCheckSpeechRecognizedFooter + ", ";
 		}
 
 		eventName += @"\""reserved\""";
@@ -113,6 +121,7 @@ public class MessageServer : MonoBehaviour {
 	string messageHeader = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [";
 	string messageMiddle = @"], \""query\"": [";
 	string messageFooter = @"]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}";
+//	string messageFooter = @"]}""";
 	string MakeMessage (string eventName, string query) {
 		string message = messageHeader + eventName + messageMiddle + query + messageFooter;
 		Debug.Log (message);
@@ -169,6 +178,13 @@ public class MessageServer : MonoBehaviour {
 			}
 			receivedMessage = "";
 		}
+
+		if (currentHIDMode != 2) {
+			UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
+			if (toggleSpeech.value) {
+				toggleSpeech.value = false;
+			}
+		}
 	}
 
 	string jsonRefine (string inString)
@@ -206,14 +222,15 @@ public class MessageServer : MonoBehaviour {
 				while (client.Connected) {
 					try {
 						int nRead = stream.Read (bytes, 0, 2048);
-						if (nRead > 0)
+						if (nRead <= 0)
 						{
-							lock (receivedMessage)
-							{
-								receivedMessage = Encoding.Default.GetString (bytes);
-								receivedMessage = receivedMessage.Substring(0, nRead);
-								Debug.Log ("Received: " + receivedMessage);
-							}
+							client.Close ();
+						}
+						lock (receivedMessage)
+						{
+							receivedMessage = Encoding.Default.GetString (bytes);
+							receivedMessage = receivedMessage.Substring(0, nRead);
+							Debug.Log ("Received: " + receivedMessage);
 						}
 					} catch (Exception ex) {
 						Debug.Log (ex.ToString ());
