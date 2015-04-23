@@ -15,6 +15,7 @@ public class MessageServer : MonoBehaviour {
 	bool mRunning;
 
 	NetworkStream stream;
+	string receivedMessage = "";
 
 	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}/r/f";
 	string rosReceivedMessage2 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\"", \""motion_detected\""], \""query\"": [\""{\\\""motion_detected.detected\\\"": true, \\\""face_detected.detected\\\"": true}\\\""]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}/r/f";
@@ -158,15 +159,19 @@ public class MessageServer : MonoBehaviour {
 				stream.ReadTimeout = 10;
 				stream.WriteTimeout = 10;
 				stream.Flush ();
-//				byte[] inByte = new byte[1024];
+				byte[] bytes = new byte[2048];
 				while (client.Connected) {
-//					try {
-//						int nRead = stream.Read (inByte, 0, 1024);
-//						Debug.Log ("[server] get: " + inByte[0].ToString () + ", " + nRead.ToString () + " bytes");
-//					} catch (Exception ex) {
-//						Debug.Log (ex.ToString ());
-//						continue;
-//					}
+					try {
+						int nRead = stream.Read (bytes, 0, 2048);
+						lock (receivedMessage)
+						{
+							receivedMessage = Encoding.Default.GetString (bytes);
+							receivedMessage = receivedMessage.Substring(0, nRead);
+						}
+					} catch (Exception ex) {
+						Debug.Log (ex.ToString ());
+						continue;
+					}
 				}
 				client.Close ();
 				Debug.Log ("[server] client disconnected");
