@@ -13,15 +13,26 @@ public class UiSpeechRecognizedManager : MonoBehaviour {
 			labelConfidence [n].text = ((int)(confidence*100)).ToString () + "%";
 		}
 	}
+
+	void Start () {
+		Invoke ("KillMe", 10);
+	}
+
+	void KillMe () {
+		Destroy (gameObject);
+	}
 	
 	public void ClickSpeech1 () {
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendSpeechRecognized (labelSpeech[0].text);
+		Destroy (gameObject);
 	}
 	public void ClickSpeech2 () {
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendSpeechRecognized (labelSpeech[1].text);
+		Destroy (gameObject);
 	}
 	public void ClickSpeech3 () {
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendSpeechRecognized (labelSpeech[2].text);
+		Destroy (gameObject);
 	}
 
 	public void EnableButtons (bool enable) {

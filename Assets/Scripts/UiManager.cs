@@ -32,6 +32,8 @@ public class UiManager : MonoBehaviour {
 	public Transform uiPanel;
 	public UIPopupModeManager uiPopupMode;
 	public Transform uiPopupEmotionManager;
+
+	public Transform uiInitiatedSpeechRecognized = null;
 	List<Transform> uiList = new List<Transform> ();
 
 	// Update is called once per frame
@@ -47,6 +49,10 @@ public class UiManager : MonoBehaviour {
 				baseHeight -= GetUIHeight (GetUIType (transform.name)) / 2;
 			}
 		}
+			if (uiInitiatedSpeechRecognized != null) {
+				if (uiInitiatedSpeechRecognized.localPosition.y != -500)
+					uiInitiatedSpeechRecognized.localPosition = new Vector3(0, -500, 0);
+			}
 		}
 		catch (System.Exception e) {
 			Debug.Log (e.ToString ());
@@ -103,12 +109,11 @@ public class UiManager : MonoBehaviour {
 	{
 		if (uiPopupMode.currentMode == 0)
 			return;
-		if (!HasUI ("SpeechRecognized")) 
+		if (uiInitiatedSpeechRecognized == null) 
 		{
-			Transform transform = Instantiate (uiSpeechRecognized, new Vector3(0, 0, 0), Quaternion.identity) as Transform;
-			uiList.Add(transform);
+			uiInitiatedSpeechRecognized = Instantiate (uiSpeechRecognized) as Transform;
 		}
-		UiSpeechRecognizedManager ui = GetUI(UI_TYPE.UI_SPEECH_RECOGNIZED).gameObject.GetComponentInChildren<UiSpeechRecognizedManager> ();
+		UiSpeechRecognizedManager ui = uiInitiatedSpeechRecognized.GetComponentInChildren<UiSpeechRecognizedManager> ();
 		ui.SetSpeechWithConfidence (n, speech, confidence);
 	}
 
@@ -172,12 +177,12 @@ public class UiManager : MonoBehaviour {
 				answer.EnableButton (enable);
 				break;
 			}
-			case UI_TYPE.UI_SPEECH_RECOGNIZED:
-			{
-				UiSpeechRecognizedManager speech = transform.GetComponentInChildren<UiSpeechRecognizedManager> ();
-				speech.EnableButtons (enable);
-				break;
-			}
+//			case UI_TYPE.UI_SPEECH_RECOGNIZED:
+//			{
+//				UiSpeechRecognizedManager speech = transform.GetComponentInChildren<UiSpeechRecognizedManager> ();
+//				speech.EnableButtons (enable);
+//				break;
+//			}
 			}
 		}
 	}
