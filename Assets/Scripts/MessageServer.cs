@@ -131,7 +131,7 @@ public class MessageServer : MonoBehaviour {
 	void Send (string message) {
 		if (stream == null)
 			return;
-		byte [] bytes = Encoding.Unicode.GetBytes (message);
+		byte [] bytes = Encoding.Default.GetBytes (message);
 		stream.Write (bytes, 0, bytes.Length);
 //		stream.Write (GetBytes (message), 0, GetBytes (message).Length);
 		Debug.Log ("Send: " + message);
