@@ -7,6 +7,8 @@ using System.Threading;
 
 public class MessageServer : MonoBehaviour {
 
+	public GameObject [] messages;
+
 	public TcpListener server = null;
 	Thread threadListen;
 	bool mRunning;
@@ -23,21 +25,91 @@ public class MessageServer : MonoBehaviour {
 	public void ClickSend () {
 		if (server == null)
 			return;
-		count++;
-		if (count > 2)
-			count = 0;
-		switch (count) {
-		case 0:
-			Send (rosReceivedMessage2);
-			break;
-		case 1:
-			TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
-			Send (textAsset.text);
-			break;
-		case 2:
-			Send (rosReceivedMessage4);
-			break;
+		TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+		Send (textAsset.text);
+//		count++;
+//		if (count > 2)
+//			count = 0;
+//		switch (count) {
+//		case 0:
+//			Send (rosReceivedMessage2);
+//			break;
+//		case 1:
+//			TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+//			Send (textAsset.text);
+//			break;
+//		case 2:
+//			Send (rosReceivedMessage4);
+//			break;
+//		}
+	}
+
+	const string eventNameFaceDetected = @"\""face_detected\""";
+	const string eventNameProspectRecognized = @"\""prospect_recognized\""";
+	const string eventNameSpeechRecognized = @"\""speech_recognized\""";
+	const string eventNameSpeechRecognizedRequest = @"\""speech_recognized_request\""";
+
+	const string queryFaceDetectedTrue  = @"\""{\\\""detected\\\"":true}\""";
+	const string queryFaceDetectedFalse = @"\""{\\\""detected\\\"":false}\""";
+
+	const string queryProspectRecognizedPositive  = @"\""{\\\""prospect\\\"":\\\""positive\\\""}\""";
+	const string queryProspectRecognizedNegative = @"\""{\\\""prospect\\\"":\\\""negative\\\""}\""";
+
+	const string querySpeechRecognizedAnswerHeader  = @"\""{\\\""recognized_word\\\"": \\\""";
+	const string querySpeechRecognizedAnswerFooter  = @"\\\""}\""";
+
+	const string querySpeechRecognized  = @"\""{\\\""detected\\\"":true}\""";
+
+	public void SendStateMessage () {
+		string eventName = "";
+		string query = "";
+		UIToggle toggleFace = messages[0].GetComponentInChildren<UIToggle> ();
+		if (toggleFace.value) {
+			eventName += eventNameFaceDetected + ", ";
+			UiFaceDetectedManager face = messages[0].GetComponentInChildren<UiFaceDetectedManager> ();
+			if (face.IsDetected ())
+				query += queryFaceDetectedTrue + ", ";
+			else
+				query += queryFaceDetectedFalse + ", ";
 		}
+
+		UIToggle toggleProspect = messages[1].GetComponentInChildren<UIToggle> ();
+		if (toggleProspect.value) {
+			eventName += eventNameProspectRecognized + ", ";
+			UiProspectRecognizedManager prospect = messages[1].GetComponentInChildren<UiProspectRecognizedManager> ();
+			if (prospect.IsPositive ())
+				query += queryProspectRecognizedPositive + ", ";
+			else
+				query += queryProspectRecognizedNegative + ", ";
+		}
+		
+		UIToggle toggleAnswer = messages[2].GetComponentInChildren<UIToggle> ();
+		if (toggleAnswer.value) {
+			eventName += eventNameSpeechRecognized + ", ";
+			UiAnswer answer = messages[2].GetComponentInChildren<UiAnswer> ();
+			query += querySpeechRecognizedAnswerHeader + answer.GetText () + querySpeechRecognizedAnswerFooter + ", ";
+		}
+		
+		UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
+		if (toggleSpeech.value) {
+			eventName += eventNameSpeechRecognizedRequest + ", ";
+		}
+
+		eventName += @"\""reserved\""";
+//		query += @"\\\""reserved\\\""";
+		query += @"\""{\\\""reserved\\\"":false}\""";
+
+		string message = MakeMessage (eventName, query);
+		Send (message);
+	}
+
+	string messageHeader = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [";
+	string messageMiddle = @"], \""query\"": [";
+	string messageFooter = @"]}"", ""header"": {""stamp"": {""secs"": 1428656219, ""nsecs"": 865901947}, ""frame_id"": "" "", ""seq"": 42}}, ""op"": ""publish""}";
+	string MakeMessage (string eventName, string query) {
+		string message = messageHeader + eventName + messageMiddle + query + messageFooter;
+		Debug.Log (message);
+		return message;
 	}
 
 	void Send (string message) {

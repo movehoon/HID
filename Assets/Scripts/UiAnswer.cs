@@ -9,6 +9,11 @@ public class UiAnswer : MonoBehaviour {
 		input.value = text;
 	}
 
+	public string GetText () 
+	{
+		return input.value;
+	}
+
 	public void ClickSend ()
 	{
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendSpeechRecognized (input.value);
