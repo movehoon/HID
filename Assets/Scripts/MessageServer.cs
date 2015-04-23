@@ -49,11 +49,13 @@ public class MessageServer : MonoBehaviour {
 	const string eventNameSpeechRecognized = @"\""speech_recognized\""";
 	const string eventNameSpeechRecognizedRequest = @"\""speech_recognized_request\""";
 
+	const string eventNameEmotionSpace = @"\""emotion_space\""";
+
 	const string queryFaceDetectedTrue  = @"\""{\\\""detected\\\"":true}\""";
 	const string queryFaceDetectedFalse = @"\""{\\\""detected\\\"":false}\""";
 
-	const string queryProspectRecognizedPositive  = @"\""{\\\""prospect\\\"":\\\""positive\\\""}\""";
-	const string queryProspectRecognizedNegative = @"\""{\\\""prospect\\\"":\\\""negative\\\""}\""";
+	const string queryProspectRecognizedPositive  = @"\""{\\\""prospect\\\"":\\\""Positive\\\""}\""";
+	const string queryProspectRecognizedNegative = @"\""{\\\""prospect\\\"":\\\""Negative\\\""}\""";
 
 	const string querySpeechRecognizedAnswerHeader  = @"\""{\\\""recognized_word\\\"": \\\""";
 	const string querySpeechRecognizedAnswerFooter  = @"\\\""}\""";
@@ -96,7 +98,6 @@ public class MessageServer : MonoBehaviour {
 		}
 
 		eventName += @"\""reserved\""";
-//		query += @"\\\""reserved\\\""";
 		query += @"\""{\\\""reserved\\\"":false}\""";
 
 		string message = MakeMessage (eventName, query);
