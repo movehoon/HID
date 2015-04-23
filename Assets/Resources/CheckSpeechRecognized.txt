@@ -1,0 +1,1 @@
+{"topic": "memory_monitor/request_hid_input", "msg": {"msg": "{\"event_name\": [\"check_speech_recognized\"], \"query\": [\"{\\\"confidence\\\": [0.2], \\\"recognized_word\\\": [\\\"24\\\"]}\"]}", "header": {"stamp": {"secs": 1429794406, "nsecs": 227833986}, "frame_id": "", "seq": 2}}, "op": "publish"}

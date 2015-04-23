@@ -41,7 +41,10 @@ public class ProgramForRos : MonoBehaviour {
 	
 	string rosSpeechRecognizedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'speech_recognized', 'recognized_word': '";
 	string rosSpeechRecognizedFooter = @"', 'confidence': 1.0}"", ""by"": ""hid""} }";
-
+	
+	string rosCheckSpeechRecognizedHeader = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'check_speech_recognized', 'recognized_word': '";
+	string rosCheckSpeechRecognizedFooter = @"', 'confidence': 1.0}"", ""by"": ""hid""} }";
+	
 	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/memory_monitor/write_to_memory"", ""args"": {""data"": ""{'event_name':'speech_recognized', 'recognized_word': ['hi']}"", ""by"": ""hid""} }";
 	string receivedMessage = "";
 
@@ -111,7 +114,7 @@ public class ProgramForRos : MonoBehaviour {
 				case "speech_recognized":
 					uiNames[i] = "Answer";
 					break;
-				case "speech_recognized_request":
+				case "check_speech_recognized":
 					uiNames[i] = "SpeechRecognized";
 					break;
 				}
@@ -123,6 +126,7 @@ public class ProgramForRos : MonoBehaviour {
 			Debug.Log ("Json query: " + query);
 			JsonData queries = JsonMapper.ToObject(msg)["query"];
 			for (int i = 0 ; i < events.Count ; i++) {
+				JsonData ev = events[i];
 				switch (events[i].ToString ())
 				{
 				case "face_detected":
@@ -158,11 +162,14 @@ public class ProgramForRos : MonoBehaviour {
 					}
 					break;
 				}
-				case "speech_recognized_request":
+				case "check_speech_recognized":
 				{
-//					string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
-//					Debug.Log ("speech_recognized/recognized_word: " + answer);
-					uiManager.SetSpeechRecognized (0, "1", 1.0f);
+					JsonData words = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"];
+					JsonData confidences = JsonMapper.ToObject(queries[i].ToString ())["confidence"];
+					for (int k = 0 ; k < words.Count ; k++) {
+						Debug.Log ("word: " + words[k].ToString () + "confidence: " + confidences[k].ToString ());
+						uiManager.SetSpeechRecognized (k, words[k].ToString (), float.Parse(confidences[k].ToString ()));
+					}
 					break;
 				}
 				}
@@ -256,7 +263,7 @@ public class ProgramForRos : MonoBehaviour {
 				}
 				lock (receivedMessage)
 				{
-#if true
+#if false
 				receivedMessage = Encoding.Unicode.GetString (bytes);
 				receivedMessage = receivedMessage.Substring(0, nRead/2);
 #else
@@ -288,7 +295,8 @@ public class ProgramForRos : MonoBehaviour {
 		uiManager.SetFaceDetected (false);
 	}
 	public void ArrowLeft () {
-		TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+		//		TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
+		TextAsset textAsset = Resources.Load ("CheckSpeechRecognized") as TextAsset;
 		Parsing (textAsset.text);
 	}
 	public void ArrowRight () {
@@ -325,7 +333,11 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	public void SendSpeechRecognized (string speech) {
 		Send (rosSpeechRecognizedHeader + speech + rosSpeechRecognizedFooter);
-//		Send (rosSpeechRecognizedHeader + ConvertToUTF8String(speech) + rosSpeechRecognizedFooter);
+		//		Send (rosSpeechRecognizedHeader + ConvertToUTF8String(speech) + rosSpeechRecognizedFooter);
+	}
+	public void SendCheckSpeechRecognized (string speech) {
+		Send (rosSpeechRecognizedHeader + speech + rosSpeechRecognizedFooter);
+		//		Send (rosSpeechRecognizedHeader + ConvertToUTF8String(speech) + rosSpeechRecognizedFooter);
 	}
 
 	string ConvertToUTF8String(string str) {
