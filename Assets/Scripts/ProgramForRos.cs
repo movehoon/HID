@@ -164,12 +164,14 @@ public class ProgramForRos : MonoBehaviour {
 				}
 				case "check_speech_recognized":
 				{
-					JsonData words = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"];
-					JsonData confidences = JsonMapper.ToObject(queries[i].ToString ())["confidence"];
-					for (int k = 0 ; k < words.Count ; k++) {
-						Debug.Log ("word: " + words[k].ToString () + "confidence: " + confidences[k].ToString ());
-						uiManager.SetSpeechRecognized (k, words[k].ToString (), float.Parse(confidences[k].ToString ()));
-					}
+					string word = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+					string confidence = JsonMapper.ToObject(queries[i].ToString ())["confidence"].ToString ();
+//					for (int k = 0 ; k < words.Count ; k++) {
+//						Debug.Log ("word: " + words[k].ToString () + "confidence: " + confidences[k].ToString ());
+					uiManager.SetSpeechRecognized (0, word, float.Parse(confidence));
+					uiManager.SetSpeechRecognized (1, "-", 0.0f);
+					uiManager.SetSpeechRecognized (2, "-", 0.0f);
+					//					}
 					break;
 				}
 				}
