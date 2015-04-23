@@ -4,6 +4,7 @@ using System.Collections;
 public class UiSpeechRecognizedManager : MonoBehaviour {
 	public UILabel[] labelSpeech;
 	public UILabel[] labelConfidence;
+	public UIButton[] buttons;
 
 	public void SetSpeechWithConfidence(int n, string speech, float confidence)
 	{
@@ -21,5 +22,11 @@ public class UiSpeechRecognizedManager : MonoBehaviour {
 	}
 	public void ClickSpeech3 () {
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendSpeechRecognized (labelSpeech[2].text);
+	}
+
+	public void EnableButtons (bool enable) {
+		foreach (UIButton button in buttons) {
+			button.enabled = enable;
+		}
 	}
 }

@@ -215,6 +215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelTrue: {fileID: 11485008}
   labelFalse: {fileID: 11485006}
+  buttonTrue: {fileID: 11485010}
+  buttonFalse: {fileID: 11485002}
 --- !u!114 &11485002
 MonoBehaviour:
   m_ObjectHideFlags: 1

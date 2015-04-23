@@ -4,7 +4,7 @@ using System.Collections;
 public class UIPopupModeManager : MonoBehaviour {
 
 	public UILabel[] labelModes;
-	public int currentMode = 0;
+	public int currentMode;
 
 	public Transform[] showLv0;
 	public UiManager uiManager;
@@ -34,6 +34,13 @@ public class UIPopupModeManager : MonoBehaviour {
 		} else {
 			foreach (Transform transform in showLv0)
 				transform.gameObject.SetActive (false);
+		}
+
+		if (mode == 3) {
+			uiManager.EnableUIActions (false);
+		}
+		else {
+			uiManager.EnableUIActions (true);
 		}
 	}
 

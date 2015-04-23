@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 11453918}
+  button: {fileID: 11485002}
 --- !u!114 &11453916
 MonoBehaviour:
   m_ObjectHideFlags: 1

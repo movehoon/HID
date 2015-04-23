@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 485000}
   - 114: {fileID: 11485006}
   m_Layer: 8
-  m_Name: NegativesLabel
+  m_Name: NegativeLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ GameObject:
   - 4: {fileID: 485002}
   - 114: {fileID: 11485008}
   m_Layer: 8
-  m_Name: PositivesLabel
+  m_Name: PositiveLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ GameObject:
   - 65: {fileID: 6585000}
   - 114: {fileID: 11485002}
   m_Layer: 8
-  m_Name: Negatives
+  m_Name: Negative
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ GameObject:
   - 65: {fileID: 6585002}
   - 114: {fileID: 11485010}
   m_Layer: 8
-  m_Name: Positives
+  m_Name: Positive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.25187111, y: -256.326111, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 485008}
@@ -215,6 +215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelPositives: {fileID: 11485008}
   labelNegatives: {fileID: 11485006}
+  buttonPositive: {fileID: 11485010}
+  buttonNegative: {fileID: 11485002}
 --- !u!114 &11485002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -334,7 +336,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 29056518aafb01b49a5b08faf8e30cff, type: 2}
-  mText: Negatives
+  mText: Negative
   mFontSize: 40
   mFontStyle: 0
   mAlignment: 0
@@ -399,7 +401,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 29056518aafb01b49a5b08faf8e30cff, type: 2}
-  mText: Positives
+  mText: Positive
   mFontSize: 40
   mFontStyle: 0
   mAlignment: 0

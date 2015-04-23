@@ -167,6 +167,9 @@ public class ProgramForRos : MonoBehaviour {
 				}
 				}
 			}
+
+			UIPopupModeManager mode = panelMode.GetComponentInChildren<UIPopupModeManager> ();
+			mode.SetMode (mode.currentMode);
 //			uiManager.SetSpeechRecognized (0, "13", 0.8f);
 //			uiManager.SetSpeechRecognized (1, "14", 0.75f);
 //			uiManager.SetSpeechRecognized (2, "15", 0.6f);

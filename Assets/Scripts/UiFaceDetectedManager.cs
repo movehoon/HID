@@ -4,7 +4,9 @@ using System.Collections;
 public class UiFaceDetectedManager : MonoBehaviour {
 	public UILabel labelTrue;
 	public UILabel labelFalse;
-	
+	public UIButton buttonTrue;
+	public UIButton buttonFalse;
+
 	Color colorSelected = new Color(25/255f, 233/255f, 59/255f);
 	Color colorDeselected = new Color(0/255f, 0/255f, 0/255f);
 
@@ -42,5 +44,10 @@ public class UiFaceDetectedManager : MonoBehaviour {
 	}
 	public void SetStateFalse () {
 		SetState (false);
+	}
+
+	public void EnableButton(bool enable) {
+		buttonTrue.enabled = enable;
+		buttonFalse.enabled = enable;
 	}
 }

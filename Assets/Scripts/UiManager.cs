@@ -150,6 +150,38 @@ public class UiManager : MonoBehaviour {
 //		}
 	}
 
+	public void EnableUIActions (bool enable) 
+	{
+		foreach (Transform transform in uiList) {
+			switch (GetUIType (transform.name)) {
+			case UI_TYPE.UI_FACE_DETECTED:
+			{
+				UiFaceDetectedManager face = transform.GetComponentInChildren<UiFaceDetectedManager> ();
+				face.EnableButton (enable);
+				break;
+			}
+			case UI_TYPE.UI_PROSPECT_RECOGNIZED:
+			{
+				UiProspectRecognizedManager prospect = transform.GetComponentInChildren<UiProspectRecognizedManager> ();
+				prospect.EnableButton (enable);
+				break;
+			}
+			case UI_TYPE.UI_ANSWER:
+			{
+				UiAnswer answer = transform.GetComponentInChildren<UiAnswer> ();
+				answer.EnableButton (enable);
+				break;
+			}
+			case UI_TYPE.UI_SPEECH_RECOGNIZED:
+			{
+				UiSpeechRecognizedManager speech = transform.GetComponentInChildren<UiSpeechRecognizedManager> ();
+				speech.EnableButtons (enable);
+				break;
+			}
+			}
+		}
+	}
+
 	bool HasUI(string uiName)
 	{
 		foreach (Transform transform in uiList) {
