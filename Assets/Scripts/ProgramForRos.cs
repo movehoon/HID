@@ -172,7 +172,6 @@ public class ProgramForRos : MonoBehaviour {
 						uiManager.SetSpeechRecognized (1, "-", 0.0f);
 						uiManager.SetSpeechRecognized (2, "-", 0.0f);
 					}
-					//					}
 					break;
 				}
 				}
@@ -180,18 +179,6 @@ public class ProgramForRos : MonoBehaviour {
 
 			UIPopupModeManager mode = panelMode.GetComponentInChildren<UIPopupModeManager> ();
 			mode.SetMode (mode.currentMode);
-//			uiManager.SetSpeechRecognized (0, "13", 0.8f);
-//			uiManager.SetSpeechRecognized (1, "14", 0.75f);
-//			uiManager.SetSpeechRecognized (2, "15", 0.6f);
-//			uiManager.UpdateEnd ();
-
-//			bool detected = JsonMapper.ToObject(query)["detected"];
-//			faceDetected = (detected) ? true : false;
-//			Debug.Log ("Json Parse: " + topic + ", detected: " + detected.ToString ());
-
-//			string detected = JsonMapper.ToObject(query)["detected"].ToString ();
-//			faceDetected = (detected == "True") ? true : false;
-//			Debug.Log ("Json Parse: " + topic + ", detected: " + detected);
 		}
 		catch (Exception ex)
 		{
