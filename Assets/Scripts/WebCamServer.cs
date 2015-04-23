@@ -9,7 +9,7 @@ using System.Threading;
 public class WebCamServer : MonoBehaviour {
 	public const int WEBCAM_WIDTH = 640;
 	public const int WEBCAM_HEIGHT = 480;
-	public const int ratio = 4;
+	public const int ratio = 2;
 
 //	public Image webCamImage;
 	
