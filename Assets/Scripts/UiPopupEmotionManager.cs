@@ -15,17 +15,20 @@ public class UiPopupEmotionManager : MonoBehaviour {
 
 	public void TouchUp () {
 		Vector3 touchPosition = UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin;
-		SetThumbPosition (touchPosition.x / touchXMax, touchPosition.y / touchYMax);
-		Debug.Log (UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin.ToString ());
+		float pleasure = touchPosition.x / touchXMax;
+		float arrousal = touchPosition.y / touchYMax;
+		SetThumbPosition (pleasure, arrousal);
+//		Debug.Log (UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin.ToString ());
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
 	}
 
 	public void SetThumbPosition (float x, float y) {
-		int dstX = 0;
-		int dstY = 0;
+		float dstX = thumb.localPosition.x;
+		float dstY = thumb.localPosition.y;
 		if (-1.0f <= x && x <= 1.0f)
-			dstX = (int)(x * width / 2);
+			dstX = x * width / 2;
 		if (-1.0f <= y && y <= 1.0f)
-			dstY = (int)(y * height / 2);
+			dstY = y * height / 2;
 		thumb.localPosition = new Vector3 (dstX, dstY, 0);
 		Debug.Log ("Move Thumb: " + thumb.localPosition.ToString ());
 	}

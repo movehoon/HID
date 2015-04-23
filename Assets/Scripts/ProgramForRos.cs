@@ -253,13 +253,8 @@ public class ProgramForRos : MonoBehaviour {
 				}
 				lock (receivedMessage)
 				{
-#if false
-				receivedMessage = Encoding.Unicode.GetString (bytes);
-				receivedMessage = receivedMessage.Substring(0, nRead/2);
-#else
 				receivedMessage = Encoding.Default.GetString (bytes);
 				receivedMessage = receivedMessage.Substring(0, nRead);
-#endif
 //				Debug.Log("length: " + nRead + ", Received: " + receivedMessage);
 				}
 			}
@@ -307,6 +302,15 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	public void SendMode3 () {
 		Send (@"{""mode"":3}");
+	}
+
+	string emotionHeader = @"{""emotion"":{""pleasure"":";
+	string emotionMiddle = @", ""arrousal"":";
+	string emotionFooter = @"}}";
+	public void SendEmotionPosition(float pleasure, float arrousal) {
+		string message = emotionHeader + pleasure.ToString () + emotionMiddle + arrousal.ToString () + emotionFooter;
+		Debug.Log ("emotion message: " + message);
+		Send (emotionHeader + pleasure.ToString () + emotionMiddle + arrousal.ToString () + emotionFooter);
 	}
 
 	public void SendFaceDetectTrue() {
