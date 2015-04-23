@@ -5,10 +5,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using LitJson;
 
 public class MessageServer : MonoBehaviour {
 
 	public GameObject [] messages;
+	public UILabel labelMode;
+
+	int currentHIDMode = 1;
 
 	public TcpListener server = null;
 	Thread threadListen;
@@ -135,6 +139,45 @@ public class MessageServer : MonoBehaviour {
 		threadListen.Start();
 	}
 
+	void Update () {
+		if (receivedMessage.Length > 0) {
+			receivedMessage = jsonRefine (receivedMessage);
+			try {
+				JsonData json = JsonMapper.ToObject (receivedMessage);
+				string mode = json ["mode"].ToString ();
+				switch (mode) {
+				case "0":
+					labelMode.text = "HID: Mode0";
+					currentHIDMode = 0;
+					break;
+				case "1":
+					labelMode.text = "HID: Mode1";
+					currentHIDMode = 1;
+					break;
+				case "2":
+					labelMode.text = "HID: Mode2";
+					currentHIDMode = 2;
+					break;
+				case "3":
+					labelMode.text = "HID: Mode3";
+					currentHIDMode = 3;
+					break;
+				}
+			}
+			catch (Exception e) {
+				Debug.Log (e.ToString ());
+			}
+			receivedMessage = "";
+		}
+	}
+
+	string jsonRefine (string inString)
+	{
+		if (inString[0] == '"' && inString[inString.Length-1] == '"')
+			inString = inString.Substring (1, inString.Length-2);
+		return inString.Replace("\\\"", "\"");
+	}
+
 	void TcpListener_Co () {
 		mRunning = true;
 		try {
@@ -163,10 +206,14 @@ public class MessageServer : MonoBehaviour {
 				while (client.Connected) {
 					try {
 						int nRead = stream.Read (bytes, 0, 2048);
-						lock (receivedMessage)
+						if (nRead > 0)
 						{
-							receivedMessage = Encoding.Default.GetString (bytes);
-							receivedMessage = receivedMessage.Substring(0, nRead);
+							lock (receivedMessage)
+							{
+								receivedMessage = Encoding.Default.GetString (bytes);
+								receivedMessage = receivedMessage.Substring(0, nRead);
+								Debug.Log ("Received: " + receivedMessage);
+							}
 						}
 					} catch (Exception ex) {
 						Debug.Log (ex.ToString ());

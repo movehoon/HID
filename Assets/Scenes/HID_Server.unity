@@ -132,13 +132,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 5
-  mWidth: 210
+  mWidth: 208
   mHeight: 60
   mDepth: 6
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 3.5
+  aspectRatio: 3.4666667
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 0ee708c39dae44f6a961b43792d3009c, type: 2}
@@ -438,6 +438,7 @@ MonoBehaviour:
   - {fileID: 439499458}
   - {fileID: 1889478299}
   - {fileID: 695842479}
+  buttons: []
 --- !u!1 &232885274
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +465,7 @@ Transform:
   m_GameObject: {fileID: 232885274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00154679036, y: .00154679036, z: .00154679036}
+  m_LocalScale: {x: .00269179, y: .00269179, z: .00269179}
   m_Children:
   - {fileID: 2121979939}
   - {fileID: 242393709}
@@ -2642,6 +2643,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelTrue: {fileID: 1852873698}
   labelFalse: {fileID: 1260759700}
+  buttonTrue: {fileID: 0}
+  buttonFalse: {fileID: 0}
 --- !u!1 &903339312
 GameObject:
   m_ObjectHideFlags: 0
@@ -2950,6 +2953,7 @@ MonoBehaviour:
   - {fileID: 1690663339}
   - {fileID: 2004105161}
   - {fileID: 210930125}
+  labelMode: {fileID: 2079571902}
 --- !u!1 &991100174
 GameObject:
   m_ObjectHideFlags: 0
@@ -4634,6 +4638,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelPositives: {fileID: 468247109}
   labelNegatives: {fileID: 1654406222}
+  buttonPositive: {fileID: 0}
+  buttonNegative: {fileID: 0}
 --- !u!1 &1852873696
 GameObject:
   m_ObjectHideFlags: 0
@@ -5170,13 +5176,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 5
-  mWidth: 132
+  mWidth: 130
   mHeight: 60
   mDepth: 6
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.20000005
+  aspectRatio: 2.16666675
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: 0ee708c39dae44f6a961b43792d3009c, type: 2}
@@ -5343,6 +5349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 1149219202}
+  button: {fileID: 0}
 --- !u!1 &2009026398
 GameObject:
   m_ObjectHideFlags: 0
