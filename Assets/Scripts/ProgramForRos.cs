@@ -298,6 +298,19 @@ public class ProgramForRos : MonoBehaviour {
 //		uiManager.UpdateEnd ();
 	}
 
+	public void SendMode0 () {
+		Send (@"{""mode"":0}");
+	}
+	public void SendMode1 () {
+		Send (@"{""mode"":1}");
+	}
+	public void SendMode2 () {
+		Send (@"{""mode"":2}");
+	}
+	public void SendMode3 () {
+		Send (@"{""mode"":3}");
+	}
+
 	public void SendFaceDetectTrue() {
 		Send (rosFaceDetectedHeader + "true" + rosFaceDetectedFooter);
 	}
