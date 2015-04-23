@@ -7,15 +7,15 @@ using System.Net.Sockets;
 using System.Threading;
 
 public class WebCamServer : MonoBehaviour {
-	public const int WEBCAM_WIDTH = 1280;
-	public const int WEBCAM_HEIGHT = 720;
+	public const int WEBCAM_WIDTH = 640;
+	public const int WEBCAM_HEIGHT = 480;
 	public const int ratio = 4;
 
 //	public Image webCamImage;
 	
 	WebCamTexture webcam = null;
 	static Texture2D texture;
-	static byte[] imgBytes;
+	static byte[] imgBytes = new byte[1];
 	
 	TcpListener server = null;
 	Thread thread;
