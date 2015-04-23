@@ -111,6 +111,9 @@ public class ProgramForRos : MonoBehaviour {
 				case "speech_recognized":
 					uiNames[i] = "Answer";
 					break;
+				case "speech_recognized_request":
+					uiNames[i] = "SpeechRecognized";
+					break;
 				}
 			}
 			uiManager.RemoveUnusingUI(uiNames);
@@ -140,19 +143,26 @@ public class ProgramForRos : MonoBehaviour {
 				{
 					string prospect = JsonMapper.ToObject(queries[i].ToString ())["prospect"].ToString ();
 					Debug.Log ("prospective_detected/prospect: " + prospect);
-					uiManager.SetProspectRecognized (prospect.Contains("Positives")?true:false);
+					uiManager.SetProspectRecognized (prospect.Contains("Positive")?true:false);
 					break;
 				}
 				case "speech_recognized":
 				{
 					try {
-					string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
-					Debug.Log ("speech_recognized/recognized_word: " + answer);
-					uiManager.SetAnswerText (answer);
+						string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+						Debug.Log ("speech_recognized/recognized_word: " + answer);
+						uiManager.SetAnswerText (answer);
 					}
 					catch (Exception e) {
 						uiManager.SetAnswerText ("");
 					}
+					break;
+				}
+				case "speech_recognized_request":
+				{
+//					string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+//					Debug.Log ("speech_recognized/recognized_word: " + answer);
+					uiManager.SetSpeechRecognized (0, "1", 1.0f);
 					break;
 				}
 				}
@@ -243,9 +253,14 @@ public class ProgramForRos : MonoBehaviour {
 				}
 				lock (receivedMessage)
 				{
+#if true
+				receivedMessage = Encoding.Unicode.GetString (bytes);
+				receivedMessage = receivedMessage.Substring(0, nRead/2);
+#else
 				receivedMessage = Encoding.Default.GetString (bytes);
 				receivedMessage = receivedMessage.Substring(0, nRead);
-				Debug.Log("length: " + nRead + ", Received: " + receivedMessage);
+#endif
+//				Debug.Log("length: " + nRead + ", Received: " + receivedMessage);
 				}
 			}
 			else
