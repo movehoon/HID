@@ -139,9 +139,14 @@ public class MessageServer : MonoBehaviour {
 	void Send (string message) {
 		if (stream == null)
 			return;
+#if UNITY_EDITOR
 		byte [] bytes = Encoding.Default.GetBytes (message);
+#elif UNITY_ANDROID
+		byte [] bytes = Encoding.UTF8.GetBytes (message);
+#else
+		byte [] bytes = Encoding.Default.GetBytes (message);
+#endif
 		stream.Write (bytes, 0, bytes.Length);
-//		stream.Write (GetBytes (message), 0, GetBytes (message).Length);
 		Debug.Log ("Send: " + message);
 	}
 	static byte[] GetBytes(string str)
