@@ -83,6 +83,18 @@ public class ProgramForRos : MonoBehaviour {
 	}
 
 	void Parsing (string jsonString) {
+		try {
+			JsonData json = JsonMapper.ToObject (jsonString);
+			string pleasure = json ["emotion"]["pleasure"].ToString ();
+			string arrousal = json ["emotion"]["arrousal"].ToString ();
+			UiPopupEmotionManager uiEmotion = panelEmotion.GetComponentInChildren<UiPopupEmotionManager> ();
+			uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
+			Debug.Log ("PA: " + pleasure + ", " + arrousal);
+			return;
+		}catch (Exception e) {
+			Debug.Log ("Exception read on emotion: " + e.ToString ());
+		}
+
 		try
 		{
 			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);

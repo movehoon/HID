@@ -194,7 +194,7 @@ public class MessageServer : MonoBehaviour {
 			}catch (Exception e) {
 				Debug.Log ("Exception on emotion: " + e.ToString ());
 			}
-					receivedMessage = "";
+			receivedMessage = "";
 		}
 
 		if (currentHIDMode != 2) {
