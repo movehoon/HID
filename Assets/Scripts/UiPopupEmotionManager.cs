@@ -20,8 +20,8 @@ public class UiPopupEmotionManager : MonoBehaviour {
 		Debug.Log (UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin.ToString ());
 		float pleasure =  Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (touchXMin, touchXMax, touchPosition.x));
 		float arrousal =  Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (touchYMin, touchYMax, touchPosition.y));
-		SetThumbPosition (pleasure, arrousal);
 		Debug.Log ("pleasure: " + pleasure.ToString () + ", arrousal: " + arrousal.ToString ());
+		SetThumbPosition (pleasure, arrousal);
 	}
 
 	public void SetThumbPosition (float x, float y) {
@@ -36,14 +36,14 @@ public class UiPopupEmotionManager : MonoBehaviour {
 	}
 
 	public void SendCurrentEmotionToServer () {
-		float pleasure = thumb.localPosition.x / width /2;
-		float arrousal = thumb.localPosition.y / height /2;
+		float pleasure = thumb.localPosition.x / (width /2);
+		float arrousal = thumb.localPosition.y / (height /2);
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
 	}
 
 	public void SendCurrentEmotionToHID () {
-		float pleasure = thumb.localPosition.x / width /2;
-		float arrousal = thumb.localPosition.y / height /2;
+		float pleasure = thumb.localPosition.x / (width /2);
+		float arrousal = thumb.localPosition.y / (height /2);
 		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
 	}
 }

@@ -334,6 +334,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1014327003}
     m_Modifications:
+    - target: {fileID: 11429278, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: onClick.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 486266, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -369,6 +373,30 @@ Prefab:
     - target: {fileID: 186266, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11463780, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: touchXMin
+      value: -.600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 11463780, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: touchYMin
+      value: -.600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 11429278, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: onClick.Array.data[1].mTarget
+      value: 
+      objectReference: {fileID: 304893509}
+    - target: {fileID: 11429278, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: onClick.Array.data[1].mMethodName
+      value: SendCurrentEmotionToServer
+      objectReference: {fileID: 0}
+    - target: {fileID: 11463780, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: touchXMax
+      value: .600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 11463780, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
+      propertyPath: touchYMax
+      value: .600000024
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d550d3cedcf8e4d02ab6521c36555c64, type: 2}
@@ -1912,6 +1940,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thumb: {fileID: 19638682}
+  width: 800
+  height: 800
+  touchXMin: -.600000024
+  touchXMax: .600000024
+  touchYMin: -.600000024
+  touchYMax: .600000024
 --- !u!1 &310539006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3335,6 +3369,10 @@ MonoBehaviour:
   onClick:
   - mTarget: {fileID: 304893509}
     mMethodName: TouchUp
+    mParameters: []
+    oneShot: 0
+  - mTarget: {fileID: 304893509}
+    mMethodName: SendCurrentEmotionToServer
     mParameters: []
     oneShot: 0
 --- !u!65 &529054524
