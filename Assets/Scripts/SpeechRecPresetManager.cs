@@ -6,9 +6,9 @@ public class SpeechRecPresetManager : MonoBehaviour {
 	public UILabel [] words;
 	public UILabel [] confidences;
 
-	string [] presetWords1 = {"전진", "언제",  "전쟁"};
+	string [] presetWords1 = {"adapt", "adept",  "adopt"};
 	string [] presetConfidences1 = {"0.8", "0.75",  "0.6"};
-	string [] presetWords2 = {"전진", "언제",  "전쟁"};
+	string [] presetWords2 = {"anyway", "anywhere",  "nowhere"};
 	string [] presetConfidences2 = {"0.45", "0.37",  "0.42"};
 
 	public void SetPreset1 () 

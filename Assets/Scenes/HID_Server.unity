@@ -3023,7 +3023,7 @@ MonoBehaviour:
   selectionColor: {r: 1, g: .874509811, b: .552941203, a: .5}
   onSubmit: []
   onChange: []
-  mValue: "\uC778\uC2DD 1"
+  mValue: word
 --- !u!114 &991100178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3590,7 +3590,7 @@ MonoBehaviour:
   selectionColor: {r: 1, g: .874509811, b: .552941203, a: .5}
   onSubmit: []
   onChange: []
-  mValue: "\uC548\uB155"
+  mValue: hello
 --- !u!61 &1149219203
 BoxCollider2D:
   m_ObjectHideFlags: 0
