@@ -44,6 +44,6 @@ public class UiPopupEmotionManager : MonoBehaviour {
 	public void SendCurrentEmotionToHID () {
 		float pleasure = thumb.localPosition.x / (width /2);
 		float arrousal = thumb.localPosition.y / (height /2);
-		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
+		GameObject.Find ("@Program").GetComponentInChildren <MessageServer> ().SendEmotionPosition (pleasure, arrousal);
 	}
 }

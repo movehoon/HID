@@ -56,8 +56,6 @@ public class MessageServer : MonoBehaviour {
 	const string eventNameSpeechRecognized = @"\""speech_recognized\""";
 	const string eventNameCheckSpeechRecognized = @"\""check_speech_recognized\""";
 
-	const string eventNameEmotionSpace = @"\""emotion_space\""";
-
 	const string queryFaceDetectedTrue  = @"\""{\\\""detected\\\"":true}\""";
 	const string queryFaceDetectedFalse = @"\""{\\\""detected\\\"":false}\""";
 
@@ -72,7 +70,7 @@ public class MessageServer : MonoBehaviour {
 	const string queryCheckSpeechRecognizedHeader  = @"\""{\\\""confidence\\\"": ";
 	const string queryCheckSpeechRecognizedMiddle  = @", \\\""recognized_word\\\"": \\\""";
 	const string queryCheckSpeechRecognizedFooter  = @"\\\""}\""";
-
+	
 	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""check_speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
 	public void SendStateMessage () {
@@ -127,6 +125,15 @@ public class MessageServer : MonoBehaviour {
 		string message = messageHeader + eventName + messageMiddle + query + messageFooter;
 		Debug.Log (message);
 		return message;
+	}
+
+	string emotionHeader = @"{""emotion"":{""pleasure"":";
+	string emotionMiddle = @", ""arrousal"":";
+	string emotionFooter = @"}}";
+	public void SendEmotionPosition(float pleasure, float arrousal) {
+		string message = emotionHeader + pleasure.ToString () + emotionMiddle + arrousal.ToString () + emotionFooter;
+		Debug.Log ("emotion message: " + message);
+		Send (emotionHeader + pleasure.ToString () + emotionMiddle + arrousal.ToString () + emotionFooter);
 	}
 
 	void Send (string message) {
