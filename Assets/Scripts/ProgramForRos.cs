@@ -99,15 +99,15 @@ public class ProgramForRos : MonoBehaviour {
 		{
 			Debug.Log ("length: " + jsonString.Length.ToString () + ", " + jsonString);
 			JsonData json = JsonMapper.ToObject (jsonString);
-			Debug.Log ("Json: " + jsonString);
+//			Debug.Log ("Json: " + jsonString);
 			string topic = json ["topic"].ToString ();
 			string msg = json ["msg"]["msg"].ToString ();
-			Debug.Log ("Json msg: " + msg);
+//			Debug.Log ("Json msg: " + msg);
 
 			// Manage UI using event_name(s)
 			string event_name = JsonMapper.ToObject(msg)["event_name"].ToString ();
 			event_name = jsonRefine(event_name);
-			Debug.Log ("Json event_name: " + event_name);
+//			Debug.Log ("Json event_name: " + event_name);
 			JsonData events = JsonMapper.ToObject(msg)["event_name"];
 			string [] uiNames = new string[events.Count];
 			for (int i = 0 ; i < events.Count ; i++) {
@@ -135,7 +135,7 @@ public class ProgramForRos : MonoBehaviour {
 
 			string query = JsonMapper.ToObject(msg)["query"].ToString ();
 			query = jsonRefine(query);
-			Debug.Log ("Json query: " + query);
+//			Debug.Log ("Json query: " + query);
 			JsonData queries = JsonMapper.ToObject(msg)["query"];
 			for (int i = 0 ; i < events.Count ; i++) {
 				JsonData ev = events[i];
@@ -298,9 +298,6 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	public void ArrowRight () {
 		Parsing (rosReceivedMessage3);
-//		uiManager.SetFaceDetected (true);
-//		uiManager.SetMotionDetected (false);
-//		uiManager.UpdateEnd ();
 	}
 
 	public void SendMode0 () {
