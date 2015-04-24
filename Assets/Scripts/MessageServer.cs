@@ -11,6 +11,7 @@ public class MessageServer : MonoBehaviour {
 
 	public GameObject [] messages;
 	public UILabel labelMode;
+	public UiPopupEmotionManager uiEmotion;
 
 	int currentHIDMode = 1;
 
@@ -174,9 +175,19 @@ public class MessageServer : MonoBehaviour {
 				}
 			}
 			catch (Exception e) {
-				Debug.Log (e.ToString ());
+				Debug.Log ("Exception on mode: " + e.ToString ());
 			}
-			receivedMessage = "";
+
+			try {
+				JsonData json = JsonMapper.ToObject (receivedMessage);
+				string pleasure = json ["emotion"]["pleasure"].ToString ();
+				string arrousal = json ["emotion"]["arrousal"].ToString ();
+				uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
+				Debug.Log ("PA: " + pleasure + ", " + arrousal);
+			}catch (Exception e) {
+				Debug.Log ("Exception on emotion: " + e.ToString ());
+			}
+					receivedMessage = "";
 		}
 
 		if (currentHIDMode != 2) {

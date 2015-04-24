@@ -4,10 +4,12 @@ using System.Collections;
 public class UiPopupEmotionManager : MonoBehaviour {
 	public Transform thumb;
 
-	int width = 800;
-	int height = 800;
-	float touchXMax = 0.6f;
-	float touchYMax = 0.6f;
+	public int width = 800;
+	public int height = 800;
+	public float touchXMin = 0.6f;
+	public float touchXMax = 1.6f;
+	public float touchYMin = 0.5f;
+	public float touchYMax = -0.5f;
 
 	void Start () {
 //		SetThumbPosition (0.5f, -0.5f);
@@ -15,11 +17,11 @@ public class UiPopupEmotionManager : MonoBehaviour {
 
 	public void TouchUp () {
 		Vector3 touchPosition = UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin;
-		float pleasure = touchPosition.x / touchXMax;
-		float arrousal = touchPosition.y / touchYMax;
+		Debug.Log (UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin.ToString ());
+		float pleasure =  Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (touchXMin, touchXMax, touchPosition.x));
+		float arrousal =  Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (touchYMin, touchYMax, touchPosition.y));
 		SetThumbPosition (pleasure, arrousal);
-//		Debug.Log (UICamera.currentCamera.ScreenPointToRay (UICamera.lastTouchPosition).origin.ToString ());
-		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
+		Debug.Log ("pleasure: " + pleasure.ToString () + ", arrousal: " + arrousal.ToString ());
 	}
 
 	public void SetThumbPosition (float x, float y) {
@@ -31,5 +33,17 @@ public class UiPopupEmotionManager : MonoBehaviour {
 			dstY = y * height / 2;
 		thumb.localPosition = new Vector3 (dstX, dstY, 0);
 		Debug.Log ("Move Thumb: " + thumb.localPosition.ToString ());
+	}
+
+	public void SendCurrentEmotionToServer () {
+		float pleasure = thumb.localPosition.x / width /2;
+		float arrousal = thumb.localPosition.y / height /2;
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
+	}
+
+	public void SendCurrentEmotionToHID () {
+		float pleasure = thumb.localPosition.x / width /2;
+		float arrousal = thumb.localPosition.y / height /2;
+		GameObject.Find ("@Program").GetComponentInChildren <ProgramForRos> ().SendEmotionPosition (pleasure, arrousal);
 	}
 }
