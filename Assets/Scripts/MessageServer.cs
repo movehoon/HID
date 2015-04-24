@@ -139,22 +139,17 @@ public class MessageServer : MonoBehaviour {
 	void Send (string message) {
 		if (stream == null)
 			return;
-#if UNITY_EDITOR
 		byte [] bytes = Encoding.Default.GetBytes (message);
-#elif UNITY_ANDROID
-		byte [] bytes = Encoding.UTF8.GetBytes (message);
-#else
-		byte [] bytes = Encoding.Default.GetBytes (message);
-#endif
 		stream.Write (bytes, 0, bytes.Length);
 		Debug.Log ("Send: " + message);
 	}
-	static byte[] GetBytes(string str)
-	{
-		byte[] bytes = new byte[str.Length * sizeof(char)];
-		System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-		return bytes;
-	}
+
+//	static byte[] GetBytes(string str)
+//	{
+//		byte[] bytes = new byte[str.Length * sizeof(char)];
+//		System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+//		return bytes;
+//	}
 
 	void Awake () {
 		threadListen = new Thread(new ThreadStart(TcpListener_Co));
