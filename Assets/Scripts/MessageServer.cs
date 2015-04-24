@@ -156,6 +156,10 @@ public class MessageServer : MonoBehaviour {
 		threadListen.Start();
 	}
 
+	void Start () {
+		uiEmotion.transform.GetComponentInChildren<TweenPosition> ().PlayReverse ();
+	}
+
 	void Update () {
 		if (receivedMessage.Length > 0) {
 			receivedMessage = jsonRefine (receivedMessage);
