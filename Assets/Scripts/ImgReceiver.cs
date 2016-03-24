@@ -40,7 +40,7 @@ public class ImgReceiver : MonoBehaviour {
 	public void DrawImg (byte[] img) {
 		texture.LoadImage (img);
 		texture.Apply ();
-		renderer.material.mainTexture = texture;
+		GetComponent<Renderer>().material.mainTexture = texture;
 //		File.WriteAllBytes ("dst.png", png);
 	}
 
@@ -72,7 +72,7 @@ public class ImgReceiver : MonoBehaviour {
 		STATE_RECV state = STATE_RECV.READY;
 		int imgLength = 0;
 		int nRead;
-		DateTime startTime;
+		DateTime startTime = DateTime.Now;
 
 		client = new TcpClient ();
 		client.Connect (IPAddress.Parse ("192.168.0.114"), 3003);

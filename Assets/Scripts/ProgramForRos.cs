@@ -17,12 +17,12 @@ public class ProgramForRos : MonoBehaviour {
 	public GameObject connectionDialog;
 	public GameObject panelMode;
 	public GameObject panelEmotion;
-	public UIInput ipaddress;
-	public UIButton connectButton;
+//	public UIInput ipaddress;
+//	public UIButton connectButton;
 	int port = 9090;
 	bool mRun = false;
 
-	public UiManager uiManager;
+//	public UiManager uiManager;
 
 	string rosSubscribe_RequestHidInput = @"{""op"":""subscribe"", ""topic"":""memory_monitor/request_hid_input"",""type"":""memory_monitor/RequestHIDInput""}";
 	string rosReceivedMessage1 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""face_detected\""], \""query\"": [\""{\\\""detected\\\"":true}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
@@ -53,14 +53,14 @@ public class ProgramForRos : MonoBehaviour {
 	bool faceDetected = true;
 	
 	void Start () {
-		connectionDialog.SetActive (true);
-		panelMode.SetActive (true);
-		TweenPosition tp = panelMode.GetComponentInChildren<TweenPosition> ();
-		tp.PlayReverse ();
-		panelEmotion.SetActive (true);
-		TweenPosition tpEmotion = panelEmotion.GetComponentInChildren<TweenPosition> ();
-		tpEmotion.PlayReverse ();
-		ipaddress.value = GetIpAddr ();
+//		connectionDialog.SetActive (true);
+//		panelMode.SetActive (true);
+//		TweenPosition tp = panelMode.GetComponentInChildren<TweenPosition> ();
+//		tp.PlayReverse ();
+//		panelEmotion.SetActive (true);
+//		TweenPosition tpEmotion = panelEmotion.GetComponentInChildren<TweenPosition> ();
+//		tpEmotion.PlayReverse ();
+//		ipaddress.value = GetIpAddr ();
 	}
 
 	void Update () {
@@ -87,8 +87,8 @@ public class ProgramForRos : MonoBehaviour {
 			JsonData json = JsonMapper.ToObject (jsonString);
 			string pleasure = json ["emotion"]["pleasure"].ToString ();
 			string arrousal = json ["emotion"]["arrousal"].ToString ();
-			UiPopupEmotionManager uiEmotion = panelEmotion.GetComponentInChildren<UiPopupEmotionManager> ();
-			uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
+//			UiPopupEmotionManager uiEmotion = panelEmotion.GetComponentInChildren<UiPopupEmotionManager> ();
+//			uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
 			Debug.Log ("PA: " + pleasure + ", " + arrousal);
 			return;
 		}catch (Exception e) {
@@ -131,66 +131,66 @@ public class ProgramForRos : MonoBehaviour {
 					break;
 				}
 			}
-			uiManager.RemoveUnusingUI(uiNames);
+//			uiManager.RemoveUnusingUI(uiNames);
 
 			string query = JsonMapper.ToObject(msg)["query"].ToString ();
 			query = jsonRefine(query);
 //			Debug.Log ("Json query: " + query);
 			JsonData queries = JsonMapper.ToObject(msg)["query"];
-			for (int i = 0 ; i < events.Count ; i++) {
-				JsonData ev = events[i];
-				switch (events[i].ToString ())
-				{
-				case "face_detected":
-				{
-					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
-					Debug.Log ("face_detected/detected: " + detected);
-					uiManager.SetFaceDetected ( detected.Contains("True")?true:false );
-					break;
-				}
-				case "motion_detected":
-				{
-					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
-					Debug.Log ("motion_detected/detected: " + detected);
-					uiManager.SetMotionDetected (detected.Contains("True")?true:false);
-					break;
-				}
-				case "prospect_recognized":
-				{
-					string prospect = JsonMapper.ToObject(queries[i].ToString ())["prospect"].ToString ();
-					Debug.Log ("prospective_detected/prospect: " + prospect);
-					uiManager.SetProspectRecognized (prospect.Contains("Positive")?true:false);
-					break;
-				}
-				case "speech_recognized":
-				{
-					try {
-						string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
-						Debug.Log ("speech_recognized/recognized_word: " + answer);
-						uiManager.SetAnswerText (answer);
-					}
-					catch (Exception e) {
-						uiManager.SetAnswerText ("");
-					}
-					break;
-				}
-				case "check_speech_recognized":
-				{
-					UIPopupModeManager modeHID = panelMode.GetComponentInChildren<UIPopupModeManager> ();
-					if(modeHID.currentMode == 2) {
-						string word = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
-						string confidence = JsonMapper.ToObject(queries[i].ToString ())["confidence"].ToString ();
-						uiManager.SetSpeechRecognized (0, word, float.Parse(confidence));
-						uiManager.SetSpeechRecognized (1, "-", 0.0f);
-						uiManager.SetSpeechRecognized (2, "-", 0.0f);
-					}
-					break;
-				}
-				}
-			}
-
-			UIPopupModeManager mode = panelMode.GetComponentInChildren<UIPopupModeManager> ();
-			mode.SetMode (mode.currentMode);
+//			for (int i = 0 ; i < events.Count ; i++) {
+//				JsonData ev = events[i];
+//				switch (events[i].ToString ())
+//				{
+//				case "face_detected":
+//				{
+//					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
+//					Debug.Log ("face_detected/detected: " + detected);
+//					uiManager.SetFaceDetected ( detected.Contains("True")?true:false );
+//					break;
+//				}
+//				case "motion_detected":
+//				{
+//					string detected = JsonMapper.ToObject(queries[i].ToString ())["detected"].ToString ();
+//					Debug.Log ("motion_detected/detected: " + detected);
+//					uiManager.SetMotionDetected (detected.Contains("True")?true:false);
+//					break;
+//				}
+//				case "prospect_recognized":
+//				{
+//					string prospect = JsonMapper.ToObject(queries[i].ToString ())["prospect"].ToString ();
+//					Debug.Log ("prospective_detected/prospect: " + prospect);
+//					uiManager.SetProspectRecognized (prospect.Contains("Positive")?true:false);
+//					break;
+//				}
+//				case "speech_recognized":
+//				{
+//					try {
+//						string answer = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+//						Debug.Log ("speech_recognized/recognized_word: " + answer);
+//						uiManager.SetAnswerText (answer);
+//					}
+//					catch (Exception e) {
+//						uiManager.SetAnswerText ("");
+//					}
+//					break;
+//				}
+//				case "check_speech_recognized":
+//				{
+//					UIPopupModeManager modeHID = panelMode.GetComponentInChildren<UIPopupModeManager> ();
+//					if(modeHID.currentMode == 2) {
+//						string word = JsonMapper.ToObject(queries[i].ToString ())["recognized_word"].ToString ();
+//						string confidence = JsonMapper.ToObject(queries[i].ToString ())["confidence"].ToString ();
+//						uiManager.SetSpeechRecognized (0, word, float.Parse(confidence));
+//						uiManager.SetSpeechRecognized (1, "-", 0.0f);
+//						uiManager.SetSpeechRecognized (2, "-", 0.0f);
+//					}
+//					break;
+//				}
+//				}
+//			}
+//
+//			UIPopupModeManager mode = panelMode.GetComponentInChildren<UIPopupModeManager> ();
+//			mode.SetMode (mode.currentMode);
 		}
 		catch (Exception ex)
 		{
@@ -211,15 +211,15 @@ public class ProgramForRos : MonoBehaviour {
 			if (!socket.Connected)
 			{
 #if true
-				SetIpAddr(ipaddress.value);
-				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
-				socket.Connect(endpoint);
-				if (socket.Connected)
-				{
-					UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
-					label.text = "Disconnect";
-				}
-				Send (rosSubscribe_RequestHidInput);
+//				SetIpAddr(ipaddress.value);
+//				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
+//				socket.Connect(endpoint);
+//				if (socket.Connected)
+//				{
+//					UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
+//					label.text = "Disconnect";
+//				}
+//				Send (rosSubscribe_RequestHidInput);
 #endif
 				mRun = true;
 				Thread thread = new Thread (new ThreadStart (Process_Thread));
@@ -286,10 +286,10 @@ public class ProgramForRos : MonoBehaviour {
 	}
 	
 	public void ArrowUp () {
-		uiManager.SetFaceDetected (true);
+//		uiManager.SetFaceDetected (true);
 	}
 	public void ArrowDown () {
-		uiManager.SetFaceDetected (false);
+//		uiManager.SetFaceDetected (false);
 	}
 	public void ArrowLeft () {
 		//		TextAsset textAsset = Resources.Load ("FaceDetectedTrue") as TextAsset;
@@ -352,7 +352,7 @@ public class ProgramForRos : MonoBehaviour {
 	public void ChangeRobotStateN(byte state, byte substate = 1) {
 		ChangeRobotState (state, substate);
 		byte imageCommand = (byte)(state * 10 + substate);
-		WebCamClient.instance.SetImageCommand (imageCommand);
+//		WebCamClient.instance.SetImageCommand (imageCommand);
 		Debug.Log ("Change state to : " + state.ToString () + "-" + substate.ToString ());
 	}
 	

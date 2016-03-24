@@ -92,7 +92,7 @@ public class ImgServer : MonoBehaviour {
 		if (!webcam.isPlaying)
 			return;
 		
-		renderer.material.mainTexture = webcam;
+		GetComponent<Renderer>().material.mainTexture = webcam;
 		if (webcam.width == WEBCAM_WIDTH && webcam.height == WEBCAM_HEIGHT) 
 		{
 			for (int y = 0 ; y < webcam.height ; y+=ratio)

@@ -10,8 +10,8 @@ using LitJson;
 public class MessageServer : MonoBehaviour {
 
 	public GameObject [] messages;
-	public UILabel labelMode;
-	public UiPopupEmotionManager uiEmotion;
+//	public UILabel labelMode;
+//	public UiPopupEmotionManager uiEmotion;
 
 	int currentHIDMode = 1;
 
@@ -74,47 +74,47 @@ public class MessageServer : MonoBehaviour {
 	string rosReceivedMessage4 = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [\""check_speech_recognized\""], \""query\"": [\""{\\\""recognized_word\\\"":[\\\""11\\\"", \\\""12\\\"", \\\""13\\\"", \\\""14\\\""], \\\""confidence\\\"":[0.8, 0.7, 0.6, 0.9]}\""]}"", ""header"": {""stamp"": {""secs"": 1429181797, ""nsecs"": 859826087}, ""frame_id"": "" "", ""seq"": 2}}, ""op"": ""publish""}";
 
 	public void SendStateMessage () {
-		string eventName = "";
-		string query = "";
-		UIToggle toggleFace = messages[0].GetComponentInChildren<UIToggle> ();
-		if (toggleFace.value) {
-			eventName += eventNameFaceDetected + ", ";
-			UiFaceDetectedManager face = messages[0].GetComponentInChildren<UiFaceDetectedManager> ();
-			if (face.IsDetected ())
-				query += queryFaceDetectedTrue + ", ";
-			else
-				query += queryFaceDetectedFalse + ", ";
-		}
-
-		UIToggle toggleProspect = messages[1].GetComponentInChildren<UIToggle> ();
-		if (toggleProspect.value) {
-			eventName += eventNameProspectRecognized + ", ";
-			UiProspectRecognizedManager prospect = messages[1].GetComponentInChildren<UiProspectRecognizedManager> ();
-			if (prospect.IsPositive ())
-				query += queryProspectRecognizedPositive + ", ";
-			else
-				query += queryProspectRecognizedNegative + ", ";
-		}
-		
-		UIToggle toggleAnswer = messages[2].GetComponentInChildren<UIToggle> ();
-		if (toggleAnswer.value) {
-			eventName += eventNameSpeechRecognized + ", ";
-			UiAnswer answer = messages[2].GetComponentInChildren<UiAnswer> ();
-			query += querySpeechRecognizedAnswerHeader + answer.GetText () + querySpeechRecognizedAnswerFooter + ", ";
-		}
-
-		UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
-		if (toggleSpeech.value) {
-			eventName += eventNameCheckSpeechRecognized + ", ";
-			UiSpeechRecognizedManager speech = messages[3].GetComponentInChildren<UiSpeechRecognizedManager> ();
-			query += queryCheckSpeechRecognizedHeader + speech.labelConfidence[0].text + queryCheckSpeechRecognizedMiddle + speech.labelSpeech[0].text + queryCheckSpeechRecognizedFooter + ", ";
-		}
-
-		eventName += @"\""reserved\""";
-		query += @"\""{\\\""reserved\\\"":false}\""";
-
-		string message = MakeMessage (eventName, query);
-		Send (message);
+//		string eventName = "";
+//		string query = "";
+//		UIToggle toggleFace = messages[0].GetComponentInChildren<UIToggle> ();
+//		if (toggleFace.value) {
+//			eventName += eventNameFaceDetected + ", ";
+//			UiFaceDetectedManager face = messages[0].GetComponentInChildren<UiFaceDetectedManager> ();
+//			if (face.IsDetected ())
+//				query += queryFaceDetectedTrue + ", ";
+//			else
+//				query += queryFaceDetectedFalse + ", ";
+//		}
+//
+//		UIToggle toggleProspect = messages[1].GetComponentInChildren<UIToggle> ();
+//		if (toggleProspect.value) {
+//			eventName += eventNameProspectRecognized + ", ";
+//			UiProspectRecognizedManager prospect = messages[1].GetComponentInChildren<UiProspectRecognizedManager> ();
+//			if (prospect.IsPositive ())
+//				query += queryProspectRecognizedPositive + ", ";
+//			else
+//				query += queryProspectRecognizedNegative + ", ";
+//		}
+//		
+//		UIToggle toggleAnswer = messages[2].GetComponentInChildren<UIToggle> ();
+//		if (toggleAnswer.value) {
+//			eventName += eventNameSpeechRecognized + ", ";
+//			UiAnswer answer = messages[2].GetComponentInChildren<UiAnswer> ();
+//			query += querySpeechRecognizedAnswerHeader + answer.GetText () + querySpeechRecognizedAnswerFooter + ", ";
+//		}
+//
+//		UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
+//		if (toggleSpeech.value) {
+//			eventName += eventNameCheckSpeechRecognized + ", ";
+//			UiSpeechRecognizedManager speech = messages[3].GetComponentInChildren<UiSpeechRecognizedManager> ();
+//			query += queryCheckSpeechRecognizedHeader + speech.labelConfidence[0].text + queryCheckSpeechRecognizedMiddle + speech.labelSpeech[0].text + queryCheckSpeechRecognizedFooter + ", ";
+//		}
+//
+//		eventName += @"\""reserved\""";
+//		query += @"\""{\\\""reserved\\\"":false}\""";
+//
+//		string message = MakeMessage (eventName, query);
+//		Send (message);
 	}
 
 	string messageHeader = @" {""topic"": ""memory_monitor/request_hid_input"", ""msg"": {""msg"": ""{\""event_name\"": [";
@@ -157,56 +157,56 @@ public class MessageServer : MonoBehaviour {
 	}
 
 	void Start () {
-		uiEmotion.transform.GetComponentInChildren<TweenPosition> ().PlayReverse ();
+//		uiEmotion.transform.GetComponentInChildren<TweenPosition> ().PlayReverse ();
 	}
 
 	void Update () {
-		if (receivedMessage.Length > 0) {
-			receivedMessage = jsonRefine (receivedMessage);
-			try {
-				JsonData json = JsonMapper.ToObject (receivedMessage);
-				string mode = json ["mode"].ToString ();
-				switch (mode) {
-				case "0":
-					labelMode.text = "HID: Mode0";
-					currentHIDMode = 0;
-					break;
-				case "1":
-					labelMode.text = "HID: Mode1";
-					currentHIDMode = 1;
-					break;
-				case "2":
-					labelMode.text = "HID: Mode2";
-					currentHIDMode = 2;
-					break;
-				case "3":
-					labelMode.text = "HID: Mode3";
-					currentHIDMode = 3;
-					break;
-				}
-			}
-			catch (Exception e) {
-				Debug.Log ("Exception on mode: " + e.ToString ());
-			}
-
-			try {
-				JsonData json = JsonMapper.ToObject (receivedMessage);
-				string pleasure = json ["emotion"]["pleasure"].ToString ();
-				string arrousal = json ["emotion"]["arrousal"].ToString ();
-				uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
-				Debug.Log ("PA: " + pleasure + ", " + arrousal);
-			}catch (Exception e) {
-				Debug.Log ("Exception on emotion: " + e.ToString ());
-			}
-			receivedMessage = "";
-		}
-
-		if (currentHIDMode != 2) {
-			UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
-			if (toggleSpeech.value) {
-				toggleSpeech.value = false;
-			}
-		}
+//		if (receivedMessage.Length > 0) {
+//			receivedMessage = jsonRefine (receivedMessage);
+//			try {
+//				JsonData json = JsonMapper.ToObject (receivedMessage);
+//				string mode = json ["mode"].ToString ();
+//				switch (mode) {
+//				case "0":
+//					labelMode.text = "HID: Mode0";
+//					currentHIDMode = 0;
+//					break;
+//				case "1":
+//					labelMode.text = "HID: Mode1";
+//					currentHIDMode = 1;
+//					break;
+//				case "2":
+//					labelMode.text = "HID: Mode2";
+//					currentHIDMode = 2;
+//					break;
+//				case "3":
+//					labelMode.text = "HID: Mode3";
+//					currentHIDMode = 3;
+//					break;
+//				}
+//			}
+//			catch (Exception e) {
+//				Debug.Log ("Exception on mode: " + e.ToString ());
+//			}
+//
+//			try {
+//				JsonData json = JsonMapper.ToObject (receivedMessage);
+//				string pleasure = json ["emotion"]["pleasure"].ToString ();
+//				string arrousal = json ["emotion"]["arrousal"].ToString ();
+//				uiEmotion.SetThumbPosition (float.Parse(pleasure), float.Parse(arrousal));
+//				Debug.Log ("PA: " + pleasure + ", " + arrousal);
+//			}catch (Exception e) {
+//				Debug.Log ("Exception on emotion: " + e.ToString ());
+//			}
+//			receivedMessage = "";
+//		}
+//
+//		if (currentHIDMode != 2) {
+//			UIToggle toggleSpeech = messages[3].GetComponentInChildren<UIToggle> ();
+//			if (toggleSpeech.value) {
+//				toggleSpeech.value = false;
+//			}
+//		}
 	}
 
 	string jsonRefine (string inString)

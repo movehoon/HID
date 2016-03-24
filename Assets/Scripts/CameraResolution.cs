@@ -14,6 +14,6 @@ public class CameraResolution : MonoBehaviour {
 		float perx = 1080.0f/Screen.width;
 		float pery = 1920.0f/Screen.height;
 		float v = (perx<pery) ? perx : pery;
-		camera.GetComponent<Camera> ().orthographicSize = v;
+		GetComponent<Camera>().GetComponent<Camera> ().orthographicSize = v;
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,25 +11,39 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using LitJson;
+using WebSocketSharp;
 
 public class Program : MonoBehaviour {
 
 	public const string Key_IpAddr = "Key_IpAddr";
 
-	public GameObject connectionDialog;
-	public UIInput ipaddress;
-//	public UIInput speakText;
-	public UIButton connectButton;
-	public UIInput nState;
-	int port = 2223;
+	public InputField ipaddress;
+	public Button connectButton;
+	public InputField inputText;
+
+	public Transform TriggerView;
+	public Transform UI_Trigger;
+
+	int port = 9090;
+	bool mRun = false;
+	string receivedMessage = @"{""topic"": ""/social_memory/request_hid_input"", ""msg"": {""msg"": ""[\""(\\uc548\\ub155|e:person-identified)\"", \""*\"", \""i:setup-topic\""]"", ""header"": {""stamp"": {""secs"": 0, ""nsecs"": 0}, ""frame_id"": """", ""seq"": 1}}, ""op"": ""publish""}";
+
+	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/social_memory/write_data"", ""args"": {""event_name"": ""speech_recognition"", ""event"":""{""speech_recognized"": true}"", ""data"": ""{""event_name"":""speech_recognized"", ""recognized_word"": ""hi""}"", ""by"": ""hid""} }";
 
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 	void Start () {
-		connectionDialog.SetActive (true);
-		ipaddress.value = GetIpAddr ();
+//		connectionDialog.SetActive (true);
+		ipaddress.text = GetIpAddr ();
 //		socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
-		MakeXml ();
+//		Parse (receivedMessage);
+	}
+
+	void Update () {
+		if (receivedMessage.Length > 0) {
+			Parse (receivedMessage);
+			receivedMessage = "";
+		}
 	}
 
 	public bool IsConnected () {
@@ -46,20 +61,23 @@ public class Program : MonoBehaviour {
 		{
 			if (!socket.Connected)
 			{
-				SetIpAddr(ipaddress.value);
-				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.value), port);
+				SetIpAddr(ipaddress.text);
+				IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipaddress.text), port);
+				Debug.Log ("Connect to " + ipaddress.text);
 				socket.Connect(endpoint);
 				if (socket.Connected)
-				{
-					UILabel label = connectButton.GetComponentInChildren<UILabel>() as UILabel;
-					label.text = "Disconnect";
-				}
+					connectButton.GetComponentInChildren<Text>().text = "Disconnect";
+				mRun = true;
+				Thread thread = new Thread (new ThreadStart (Process_Thread));
+				thread.Start ();
+				TopicSub ("/social_memory/request_hid_input");
 			}
 			else
 			{
+				mRun = false;
 				socket.Shutdown(SocketShutdown.Both);
 				socket.Disconnect (true);
-				Application.LoadLevel(0);
+				connectButton.GetComponentInChildren<Text>().text = "Connect";
 			}
 		}
 		catch (Exception ex) 
@@ -68,40 +86,40 @@ public class Program : MonoBehaviour {
 		}
 	}
 
+	public void TopicSub(string topic) {
+		RosTopicSub topicSub = new RosTopicSub ();
+		topicSub.op = "subscribe";
+		topicSub.topic = topic;
+		Send (JsonMapper.ToJson(topicSub));
+	}
+
+	public void SendSpeechRecognized (string speech) {
+		RosSpeechRecognized speechRec = new RosSpeechRecognized ();
+		speechRec.speech_recognized = true;
+
+		RosSpeechData speechData = new RosSpeechData ();
+		speechData.recognized_word = speech;
+		speechData.confidence = 1.0;
+
+		RosEvent evt = new RosEvent ();
+		evt.event_name = "speech_recognition";
+		evt.@event = JsonMapper.ToJson(speechRec);
+		evt.data = JsonMapper.ToJson(speechData);
+		evt.by = "hid";
+
+		RosCallService writeToMemory = new RosCallService ();
+		writeToMemory.op = "call_service";
+		writeToMemory.service = "/social_memory/write_data";
+		writeToMemory.args = evt;
+
+		string jsonString = JsonMapper.ToJson(writeToMemory);
+		Send (jsonString);
+	}
+
 	public void Test () {
-		string jsonString = @"{""state"":""1""}";
-		Send (jsonString);
+		SendSpeechRecognized (inputText.text);
 	}
 
-	public void ArrowUp () {
-		ChangeRobotStateN (12);
-	}
-	public void ArrowDown () {
-		ChangeRobotStateN (13);
-	}
-	public void ArrowLeft () {
-		ChangeRobotStateN (14);
-	}
-	public void ArrowRight () {
-		ChangeRobotStateN (15);
-	}
-
-	public void ChangeRobotStateN(byte state, byte substate = 1) {
-		ChangeRobotState (state, substate);
-		byte imageCommand = (byte)(state * 10 + substate);
-		WebCamClient.instance.SetImageCommand (imageCommand);
-		Debug.Log ("Change state to : " + state.ToString () + "-" + substate.ToString ());
-	}
-	
-	public void ChangeRobotState (byte state, byte substate) {
-		string jsonString = @"{""state"":""";
-		jsonString += state.ToString ();
-		jsonString += @""", ""substate"":""";
-		jsonString += substate.ToString ();
-		jsonString += @"""}";
-		Send (jsonString);
-	}
-	
 	void Behavior (string str) {
 		string jsonString = @"{""behavior"":""";
 		jsonString += str;
@@ -109,19 +127,100 @@ public class Program : MonoBehaviour {
 		Send (jsonString);
 	}
 
+	void Parse (string input) {
+		JsonData json = JsonMapper.ToObject (input);
+		if (json ["op"].ToString () == "publish") {
+			if (json ["topic"].ToString () == "/social_memory/request_hid_input") {
+				string trig_string = jsonRefine(json ["msg"] ["msg"].ToString ());
+				JsonData json_triggers = JsonMapper.ToObject (trig_string);
+				List<string> triggers = new List<string> ();
+				for (int i = 0; i < json_triggers.Count; i++) {
+					if (hasOR (json_triggers [i].ToString ())) {
+						string[] tmpString = separateOR (json_triggers [i].ToString ());
+						foreach (string trig in tmpString)
+							triggers.Add (trig);
+					} else {
+						triggers.Add (json_triggers [i].ToString ());
+					}
+				}
+
+				float yStart = -20f;
+				float yStep = -40f;
+				for (int i = 0; i < TriggerView.childCount; i++) {
+					Destroy (TriggerView.GetChild (i).gameObject);
+				}
+				TriggerView.DetachChildren ();
+				for (int i = 0; i < triggers.Count; i++) {
+					Transform uiTrigger = Instantiate (UI_Trigger);
+					uiTrigger.SetParent (TriggerView);
+					uiTrigger.GetComponentInChildren<Text> ().text = triggers [i];
+					uiTrigger.GetComponentInChildren<RectTransform> ().offsetMin = new Vector2(20f, yStart + yStep * i + -15);
+					uiTrigger.GetComponentInChildren<RectTransform> ().offsetMax = new Vector2(-20f, yStart + yStep * i + 15);
+				}
+			}
+		}
+	}
+
+	bool hasOR (string inputString) {
+		if (inputString.Contains ('|'))
+			return true;
+		return false;
+	}
+
+	string[] separateOR (string inputString) {
+		inputString = inputString.Replace ("(", String.Empty);
+		inputString = inputString.Replace (")", String.Empty);
+		return inputString.Split ('|');
+	}
+
+	string jsonRefine (string inString)
+	{
+		if (inString[0] == '"' && inString[inString.Length-1] == '"')
+			inString = inString.Substring (1, inString.Length-2);
+		return inString.Replace("\\\"", "\"");
+	}
+
 	void Send (string jsonString) {
 		try {
-//			if (socket.Connected)
-//			{
+			if (socket.Connected)
+			{
 				socket.Send(Encoding.Default.GetBytes(jsonString + "\r\n"));
 				Debug.Log (jsonString);
-//			}
-//			else
-//			{
-//				Debug.Log ("Socket is not connected");
-//			}
+			}
+			else
+			{
+				Debug.Log ("Socket is not connected");
+			}
 		} catch (Exception e) {
 			Debug.Log (e.ToString ());
+		}
+	}
+
+	bool threadWriting = false;
+	void Process_Thread () {
+		byte[] bytes = new byte[2048];
+		while (mRun)
+		{
+			if (socket.Connected)
+			{
+				int nRead = socket.Receive(bytes);
+				if (nRead <= 0)
+				{
+					socket.Close ();
+				}
+				lock (receivedMessage)
+				{
+					receivedMessage = Encoding.Default.GetString (bytes);
+					receivedMessage = receivedMessage.Substring(0, nRead);
+					Debug.Log("length: " + nRead + ", Received: " + receivedMessage);
+				}
+			}
+			else
+			{
+				Debug.Log ("Socket is disconnected");
+//				Disconnect ();
+			}
+			Thread.Sleep(1);
 		}
 	}
 
@@ -136,23 +235,6 @@ public class Program : MonoBehaviour {
 	static public void SetIpAddr(string ipAddr)
 	{
 		PlayerPrefs.SetString(Key_IpAddr, ipAddr);
-	}
-
-	public void MakeXml()
-	{
-		Dictionary<string, string> scenario = new Dictionary<string, string> ();
-
-//		string json = @"
-//			{""state"":
-//				{""id"":""s0"",
-//				 ""name"":""Ready""},
-//			{""action"":
-//				{""tts"":""hello"",
-//				 ""behavior"":""behav0""},
-//			[{""s1"":"".""}]
-//			}";
-//		JsonData jsonData = JsonMapper.ToObject (json);
-//		XmlSerializer xmlSerializer = new XmlSerializer ();
 	}
 
 	public void ReloadScene ()

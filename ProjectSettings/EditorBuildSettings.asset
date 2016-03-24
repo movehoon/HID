@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/HIDnew.unity
+    path: Assets/_Scenes/HIDnew.unity
   - enabled: 0
-    path: Assets/Scenes/WebCamServer.unity
+    path: Assets/_Scenes/WebCamServer.unity
   - enabled: 0
-    path: Assets/Scenes/HID4.unity
+    path: Assets/_Scenes/HID4.unity
   - enabled: 0
-    path: Assets/Scenes/HID5.unity
+    path: Assets/_Scenes/HID5.unity
