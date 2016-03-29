@@ -11,23 +11,24 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using LitJson;
-using WebSocketSharp;
 
 public class Program : MonoBehaviour {
 
 	public const string Key_IpAddr = "Key_IpAddr";
+	const string IGN_TRIG_NAME = "e:setup-topic";
 
 	public InputField ipaddress;
 	public Button connectButton;
 	public InputField inputText;
 
-	public Transform TriggerView;
+	public RectTransform TriggerView;
 	public Transform UI_Trigger;
+	public GameObject UI_PopupRecogInput;
 
 	int port = 9090;
 	bool mRun = false;
 	string receivedMessage = @"{""topic"": ""/social_memory/request_hid_input"", ""msg"": {""msg"": ""[\""(\\uc548\\ub155|e:person-identified)\"", \""*\"", \""i:setup-topic\""]"", ""header"": {""stamp"": {""secs"": 0, ""nsecs"": 0}, ""frame_id"": """", ""seq"": 1}}, ""op"": ""publish""}";
-
+	string parsingMessage = "";
 	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/social_memory/write_data"", ""args"": {""event_name"": ""speech_recognition"", ""event"":""{""speech_recognized"": true}"", ""data"": ""{""event_name"":""speech_recognized"", ""recognized_word"": ""hi""}"", ""by"": ""hid""} }";
 
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -41,7 +42,9 @@ public class Program : MonoBehaviour {
 
 	void Update () {
 		if (receivedMessage.Length > 0) {
-			Parse (receivedMessage);
+			parsingMessage += receivedMessage;
+			if (Parse (parsingMessage))
+				parsingMessage = "";
 			receivedMessage = "";
 		}
 	}
@@ -93,6 +96,16 @@ public class Program : MonoBehaviour {
 		Send (JsonMapper.ToJson(topicSub));
 	}
 
+	public void ReloadDialog () {
+		RosCallService reload = new RosCallService ();
+		reload.op = "call_service";
+		reload.service = "/mhri_dialog/reload";
+		reload.args = null;
+
+		string jsonString = JsonMapper.ToJson (reload);
+		Send (jsonString);
+	}
+
 	public void SendSpeechRecognized (string speech) {
 		RosSpeechRecognized speechRec = new RosSpeechRecognized ();
 		speechRec.speech_recognized = true;
@@ -120,49 +133,61 @@ public class Program : MonoBehaviour {
 		SendSpeechRecognized (inputText.text);
 	}
 
-	void Behavior (string str) {
-		string jsonString = @"{""behavior"":""";
-		jsonString += str;
-		jsonString += @"""}";
-		Send (jsonString);
-	}
-
-	void Parse (string input) {
-		JsonData json = JsonMapper.ToObject (input);
-		if (json ["op"].ToString () == "publish") {
-			if (json ["topic"].ToString () == "/social_memory/request_hid_input") {
-				string trig_string = jsonRefine(json ["msg"] ["msg"].ToString ());
-				JsonData json_triggers = JsonMapper.ToObject (trig_string);
-				List<string> triggers = new List<string> ();
-				for (int i = 0; i < json_triggers.Count; i++) {
-					if (hasOR (json_triggers [i].ToString ())) {
-						string[] tmpString = separateOR (json_triggers [i].ToString ());
-						foreach (string trig in tmpString)
-							triggers.Add (trig);
-					} else {
-						triggers.Add (json_triggers [i].ToString ());
+	bool Parse (string input) {
+		try {
+			JsonData json = JsonMapper.ToObject (input);
+			if (json ["op"].ToString () == "publish") {
+				if (json ["topic"].ToString () == "/social_memory/request_hid_input") {
+					string trig_string = jsonRefine(json ["msg"] ["msg"].ToString ());
+					JsonData json_triggers = JsonMapper.ToObject (trig_string);
+					List<string> triggers = new List<string> ();
+					for (int i = 0; i < json_triggers.Count; i++) {
+						if (json_triggers [i].ToString ().Contains (IGN_TRIG_NAME))
+							continue;
+//						if (hasOR (json_triggers [i].ToString ())) {
+//							string[] tmpString = separateOR (json_triggers [i].ToString ());
+//							foreach (string trig in tmpString)
+//								triggers.Add (trig);
+//						} else {
+							triggers.Add (json_triggers [i].ToString ());
+//						}
+						Debug.Log ("Trigger " + json_triggers [i].ToString());
 					}
-				}
 
-				float yStart = -20f;
-				float yStep = -40f;
-				for (int i = 0; i < TriggerView.childCount; i++) {
-					Destroy (TriggerView.GetChild (i).gameObject);
-				}
-				TriggerView.DetachChildren ();
-				for (int i = 0; i < triggers.Count; i++) {
-					Transform uiTrigger = Instantiate (UI_Trigger);
-					uiTrigger.SetParent (TriggerView);
-					uiTrigger.GetComponentInChildren<Text> ().text = triggers [i];
-					uiTrigger.GetComponentInChildren<RectTransform> ().offsetMin = new Vector2(20f, yStart + yStep * i + -15);
-					uiTrigger.GetComponentInChildren<RectTransform> ().offsetMax = new Vector2(-20f, yStart + yStep * i + 15);
+					RectTransform Content = TriggerView.GetComponentInChildren<ScrollRect>().content.GetComponentInChildren<RectTransform>();
+					Content.sizeDelta = new Vector2 (TriggerView.sizeDelta.x, triggers.Count * 40f);
+
+
+					float yStart = -20f;
+					float yStep = -40f;
+					for (int i = 0; i < Content.childCount; i++) {
+						Destroy (Content.GetChild (i).gameObject);
+					}
+					Content.DetachChildren ();
+					for (int i = 0; i < triggers.Count; i++) {
+						Transform uiTrigger = Instantiate (UI_Trigger);
+						uiTrigger.SetParent (Content);
+						uiTrigger.GetComponentInChildren<Text> ().text = triggers [i];
+						uiTrigger.GetComponentInChildren<RectTransform> ().offsetMin = new Vector2(20f, yStart + yStep * i + -15);
+						uiTrigger.GetComponentInChildren<RectTransform> ().offsetMax = new Vector2(-20f, yStart + yStep * i + 15);
+					}
 				}
 			}
 		}
+		catch (JsonException ex) {
+			Debug.Log (ex.ToString ());
+			return true;
+		}
+		catch (ArgumentOutOfRangeException ex) {
+			Debug.Log (ex.ToString ());
+			return true;
+		}
+
+		return true;
 	}
 
 	bool hasOR (string inputString) {
-		if (inputString.Contains ('|'))
+		if (inputString.Contains ("|"))
 			return true;
 		return false;
 	}
@@ -196,7 +221,6 @@ public class Program : MonoBehaviour {
 		}
 	}
 
-	bool threadWriting = false;
 	void Process_Thread () {
 		byte[] bytes = new byte[2048];
 		while (mRun)
@@ -239,6 +263,6 @@ public class Program : MonoBehaviour {
 
 	public void ReloadScene ()
 	{
-		Application.LoadLevel (0);
+		UnityEngine.SceneManagement.SceneManager.LoadScene (0);
 	}
 }
