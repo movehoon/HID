@@ -27,7 +27,7 @@ public class Program : MonoBehaviour {
 
 	int port = 9090;
 	bool mRun = false;
-	string receivedMessage = @"{""topic"": ""/social_memory/request_hid_input"", ""msg"": {""msg"": ""[\""(\\uc548\\ub155|e:person-identified)\"", \""*\"", \""i:setup-topic\""]"", ""header"": {""stamp"": {""secs"": 0, ""nsecs"": 0}, ""frame_id"": """", ""seq"": 1}}, ""op"": ""publish""}";
+	string receivedMessage = @"{""topic"": ""/social_memory/request_hid_input"", ""msg"": {""msg"": ""[\""(\\uc548\\ub155|e:person-identified)\"", \""\\ub10c (\\ubb34\\uc5c7*|\\ubb58|\\ubb50|\\uc5b4\\ub5a4*) \\uba39*\"", \""*\"", \""e:setup-topic\""]"", ""header"": {""stamp"": {""secs"": 0, ""nsecs"": 0}, ""frame_id"": """", ""seq"": 1}}, ""op"": ""publish""}";
 	string parsingMessage = "";
 	string rosSpeechRecog = @"{ ""op"": ""call_service"", ""service"": ""/social_memory/write_data"", ""args"": {""event_name"": ""speech_recognition"", ""event"":""{""speech_recognized"": true}"", ""data"": ""{""event_name"":""speech_recognized"", ""recognized_word"": ""hi""}"", ""by"": ""hid""} }";
 
@@ -205,7 +205,7 @@ public class Program : MonoBehaviour {
 		return inString.Replace("\\\"", "\"");
 	}
 
-	void Send (string jsonString) {
+	public void Send (string jsonString) {
 		try {
 			if (socket.Connected)
 			{
