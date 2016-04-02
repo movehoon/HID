@@ -11,10 +11,6 @@ public class UI_PopupRecogInput : MonoBehaviour {
 	public GameObject UI_Button;
 
 	public void InitUI (string triggers_input) {
-		wildcard.text = "";
-		EventSystem.current.SetSelectedGameObject(wildcard.gameObject, null);
-		wildcard.OnPointerClick (new PointerEventData(EventSystem.current));
-
 		triggers_input = triggers_input.Replace ("(", string.Empty);
 		triggers_input = triggers_input.Replace (")", string.Empty);
 		string[] trigs = triggers_input.Split ('|');

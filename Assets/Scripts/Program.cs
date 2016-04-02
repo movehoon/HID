@@ -24,6 +24,7 @@ public class Program : MonoBehaviour {
 	public RectTransform TriggerView;
 	public Transform UI_Trigger;
 	public GameObject UI_PopupRecogInput;
+	public GameObject UI_PopupWildcardInput;
 
 	int port = 9090;
 	bool mRun = false;
@@ -34,6 +35,7 @@ public class Program : MonoBehaviour {
 	Socket socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 	void Start () {
+		TriggerView.sizeDelta = new Vector2(TriggerView.sizeDelta.x, (float)Screen.height/2f);
 //		connectionDialog.SetActive (true);
 		ipaddress.text = GetIpAddr ();
 //		socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
